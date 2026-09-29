@@ -52,6 +52,7 @@ const DOCS: Array<{ label: string; key: string; path: string }> = [
 
 // Pull out the body of every ```ts fenced code block.
 function extractTsBlocks(md: string): string[] {
+  md = md.replace(/\r\n?/g, '\n')
   const blocks: string[] = []
   const re = /```ts\n([\s\S]*?)```/g
   let m: RegExpExecArray | null
@@ -316,6 +317,25 @@ function indentBlock(code: string): string {
 
 
 describe('README examples', () => {
+  it('extractTsBlocks preserves all TypeScript snippets for LF, CRLF and CR documents', () => {
+    const fence = String.fromCharCode(96).repeat(3)
+    const first = [
+      'const client = new TallySDK()',
+      'console.log(client.options())',
+    ]
+    const second = ['const label: string = "example"', 'console.log(label)']
+    const lines = [
+      '# SDK guide', '', fence + 'javascript', "console.log('not TypeScript')", fence,
+      '', '## Quickstart', fence + 'ts', ...first, fence,
+      '', '## Typed value', fence + 'ts', ...second, fence,
+    ]
+    const expected = [first.join('\n') + '\n', second.join('\n') + '\n']
+    for (const newline of ['\n', '\r\n', '\r']) {
+      assert.deepStrictEqual(extractTsBlocks(lines.join(newline)), expected,
+        'Extraction must retain both actual snippets in order for newline ' + JSON.stringify(newline))
+    }
+  })
+
   for (const doc of DOCS) {
     it(doc.label + ' — every example type-checks or is a known illustration', () => {
       // A target without this doc has nothing to check.

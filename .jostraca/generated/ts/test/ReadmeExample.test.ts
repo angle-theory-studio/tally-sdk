@@ -9,6 +9,7 @@ import { TallySDK } from '..'
 
 
 function findFirstTsBlock(md: string, sectionHeading: string): string | null {
+  md = md.replace(/\r\n?/g, '\n')
   const escapedHeading = sectionHeading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const re = new RegExp('##\\s+' + escapedHeading + '[\\s\\S]*?```ts\\n([\\s\\S]*?)```')
   const m = md.match(re)
@@ -26,6 +27,26 @@ function transformForTestMode(code: string, name: string): string {
 
 
 describe('README example', () => {
+  it('findFirstTsBlock preserves the same TypeScript snippet for LF, CRLF and CR documents', () => {
+    const fence = String.fromCharCode(96).repeat(3)
+    const snippet = [
+      'const client = new TallySDK()',
+      'const options = client.options()',
+      'console.log(options)',
+    ]
+    const lines = [
+      '# SDK guide', '', '## Installation',
+      fence + 'javascript', "console.log('installation example')", fence,
+      '', '## Quickstart', '', fence + 'ts', ...snippet, fence,
+      '', '## Other examples', fence + 'ts', 'const other: string = "later"', fence,
+    ]
+    const expected = snippet.join('\n') + '\n'
+    for (const newline of ['\n', '\r\n', '\r']) {
+      assert.strictEqual(findFirstTsBlock(lines.join(newline), 'Quickstart'), expected,
+        'Quickstart extraction must preserve the actual snippet for newline ' + JSON.stringify(newline))
+    }
+  })
+
   it('lead-language quickstart runs in test mode', async () => {
     const readmePath = Path.join(__dirname, '..', '..', 'README.md')
     const md = Fs.readFileSync(readmePath, 'utf8')

@@ -17,6 +17,7 @@ Separate AI roles handled requirements and the API matrix, transport implementat
 | Errors could be mistaken for successful empty data | Typed companion rejects request validation, transport, HTTP and response-schema failures | HTTP 401/422, network, invalid JSON and malformed-schema fixtures |
 | Typed and direct requests bypassed the HTTP-method allowlist | Normalize and check exact method tokens in `prepare()` before transport | GET-only policy permits all five reads and rejects all six writes; direct/prepare reject forbidden and substring methods before fetch |
 | Unix-specific build and quoting | Node cleanup and cross-platform npm scripts; locked installs | Local clean build; Ubuntu/Windows CI configured for the same gates |
+| Windows documentation examples failed after successful compilation | Normalize CRLF/CR in both generated Markdown extractors | First Windows CI reproduced 7 failures; two independent line-ending regressions failed before the fix and pass after it |
 | Package publication used a fresh unbuilt checkout | Manual workflow verifies and transfers the exact packed artifact | Missing-dist artifact is rejected; complete tarball loads outside the checkout |
 | Generated documentation contradicted candidate ownership and publication status | Corrected root docs, attribution, source installation and security guidance | Readable source instructions, tested README example, source/packed LICENSE |
 | Packaged reference mixed request and response fields and misstated entity return/state behavior | Generate a typed-API entry section and accurate legacy return/state guidance; label mixed field inventories | Independent review of generated README/reference against runtime and declarations |
@@ -34,7 +35,7 @@ Environment for local execution: Linux, Node.js 24.19.0, npm 11.9.0. The final c
 | Locked installation in generator and TypeScript target | `npm ci --offline` exited 0, using the existing npm cache |
 | Complete generation from clean source | `npm run generate` exited 0 |
 | Regenerated source and maintained-file identity | 119 files compared; zero differences; temporary documentation-test snippets excluded |
-| Generated TypeScript build and tests | 209 tests: 208 passed, 1 skipped, 0 failed |
+| Generated TypeScript build and tests | 211 tests: 210 passed, 1 skipped, 0 failed; includes two LF/CRLF/CR extraction regressions |
 | Skip reason | `FeatureCorpus / cost`; optional feature not selected, not a skipped API endpoint |
 | Independent API contract checks | 32 passed, including all 11 HTTP operations and method restrictions |
 | Actual README example | 2 passed: with and without a pagination cursor |

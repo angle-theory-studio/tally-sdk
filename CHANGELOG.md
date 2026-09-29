@@ -10,6 +10,7 @@ Candidate-maintained record for this generator evaluation. No npm release has be
 - Exclude path IDs from DELETE query parameters; retain supported transport encoding and false/zero/empty query values.
 - Enforce exact HTTP-method allowlists in typed, direct and prepared requests before transport; normalize lowercase methods.
 - Make npm build/test cleanup and quoting work across operating systems; preserve lockfiles on reset.
+- Normalize Markdown line endings in generated example tests; cover LF, CRLF and CR with independent regressions.
 - Add independent endpoint fixtures, error and pagination cases, positive/negative type checks, executable examples and isolated package checks.
 - Replace unused-language CI jobs with TypeScript checks on Ubuntu and Windows. Verify the exact tarball used by the optional publishing workflow.
 - Improve source installation, attribution and documentation. Preserve maintained root files during SDK regeneration.
