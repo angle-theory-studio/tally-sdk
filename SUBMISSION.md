@@ -8,7 +8,7 @@ Candidate profile: [angle-theory-studio](https://github.com/angle-theory-studio)
 
 - Generated five entity classes from an upstream definition containing eight paths and eleven HTTP operations; this does not establish complete SDK operation coverage.
 - Build succeeded on Linux with Node.js 24.19.0 and npm 11.9.0.
-- Generated offline tests: **209 total, 208 passed, one skipped, zero failed**.
+- Generated offline tests: **209 total, 208 passed, one skipped, zero failed**. The skipped `FeatureCorpus / cost` test concerns an optional feature not selected for this SDK.
 - A separate API-contract regression check passes after correcting the inferred food-list response mapping. It failed against the original generated mapping.
 - Generator `doctor` reported that the scaffold matches. This is a scaffold check, not proof of API compatibility.
 - No authenticated live API request was made: an API token was not available. Availability of a free API tier was not verified.
@@ -51,7 +51,9 @@ npm ci
 npm run generate
 ```
 
-Run this block from the repository root. Generated client source is not hand-patched. Candidate metadata is in the project model overlay; the food-list response correction is in `.sdk/model/guide/guide.aontu`. Root README notes, this submission note, the DX report, changelog and security policy are candidate-maintained documentation; regeneration may refresh generated documentation.
+Run this block from the repository root. Generated client source is not hand-patched. Candidate metadata is in the project model overlay; the food-list response correction is in `.sdk/model/guide/guide.aontu`. Root documentation, licensing and release configuration are candidate-maintained. The project overlay disables the generator's root `top` phase so it does not overwrite these files; TypeScript target generation remains enabled. Review root documentation and release configuration manually when the target or toolchain changes.
+
+Verified from a fresh copy of the submitted source using `npm ci --offline` with a populated npm cache, followed by `npm run generate`: both succeeded. Root README, LICENSE, SECURITY, CHANGELOG and the candidate CI/publish workflows remained byte-identical; TypeScript source was unchanged. This check did not verify availability of dependencies from the public npm registry on a machine without a cache.
 
 ## Known generated limitations
 

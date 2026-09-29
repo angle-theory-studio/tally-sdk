@@ -31,3 +31,8 @@ main: kit: author: {
   url: 'https://github.com/angle-theory-studio'
 }
 main: kit: target: ts: publish: registry: package: '@angle-theory-studio/tally-sdk'
+
+# Preserve candidate-maintained root documentation, attribution and workflows.
+# SDK target generation stays enabled. The default Top phase otherwise
+# overwrites the root LICENSE, SECURITY.md and README with vendor defaults.
+main: kit: phase: top: active: false

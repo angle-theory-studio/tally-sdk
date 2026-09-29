@@ -1,5 +1,13 @@
 # Tally SDK
 
+## Voxgig Task 1 submission
+
+Start with [SUBMISSION.md](SUBMISSION.md) for the verified source build and test commands. Read [DX_REPORT.md](DX_REPORT.md) for observations and [AUDIT.md](AUDIT.md) for verification and limitations.
+
+This candidate-owned repository contains a TypeScript SDK for the nutrition tracker at logwithtally.com. It has no npm release or release tags. The offline generated suite has 208 passing tests and one skipped optional-feature test; an additional API-contract regression passes. Authenticated live API testing has not been performed, and human work time was not measured.
+
+The generated overview below retains documented generator limitations, including `Features: undefined` and installation links to unavailable tags. Use the source instructions above. Root documentation is maintained by the candidate and preserved during SDK regeneration.
+
 Tally API client, generated from the OpenAPI spec.
 
 Tally is a personal nutrition and weight tracker.
@@ -196,7 +204,7 @@ The OpenAPI spec(s) this SDK was generated from are kept in the
 
 ## Security
 
-Please report security issues to security@voxgig.com. See [SECURITY.md](SECURITY.md).
+See the candidate-maintained [SECURITY.md](SECURITY.md) for reporting guidance.
 Do not open public issues for suspected vulnerabilities.
 
 ---

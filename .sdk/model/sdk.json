@@ -1,6 +1,15 @@
 {
+  "NAME": "TALLY",
+  "Name": "Tally",
   "def": "openapi.yaml",
   "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
+    "custom": {
+      "plurals": {}
+    },
     "def": {
       "desc": ""
     },
@@ -1372,7 +1381,7 @@
           "active": true
         },
         "top": {
-          "active": true
+          "active": false
         }
       },
       "repo": {
@@ -1473,5 +1482,8 @@
     }
   },
   "name": "tally",
+  "name-": "tally",
+  "name_": "tally",
+  "name__orig": "tally",
   "origin": "voxgig-sdk"
 }
