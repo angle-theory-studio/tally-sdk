@@ -1,26 +1,59 @@
 # Tally TypeScript SDK
 
+Unofficial TypeScript SDK for the [Tally nutrition tracker](https://www.logwithtally.com), generated with Voxgig SDK tools.
 
+## Recommended API
 
-The TypeScript SDK for the Tally API — a type-safe, entity-oriented client with full async/await support.
+Use `client.api` for all 11 documented HTTP operations. Each method returns
+its complete, typed JSON response and checks the declared response schema.
+Food entries retain daily totals, remaining macros and goals; feed responses
+retain `older_before` for pagination. Create and preview are separate methods.
 
-The API is exposed as capitalised, semantic **Entities** — e.g.
-`client.Feed()` — each with a small set of operations (`list`, `create`, `update`, `remove`)
-instead of raw URL paths and query parameters. This keeps the surface
-predictable and low-friction for both humans and AI agents.
+| Method | HTTP endpoint | Response |
+| --- | --- | --- |
+| `listFoodEntries({ date? })` | GET /food_entries | Entries, totals, remaining macros, goals and date |
+| `createFoodEntries({ input, meal_type?, date? })` | POST /food_entries | All created entries, totals and remaining macros |
+| `parseFoodEntries({ input, meal_type? })` | POST /food_entries/parse | Preview with raw input, meal type and parsed entries |
+| `updateFoodEntry(id, { entry? })` | PATCH /food_entries/{id} | Updated food entry |
+| `deleteFoodEntry(id)` | DELETE /food_entries/{id} | Message, totals and remaining macros |
+| `listMoodEntries({ date? })` | GET /mood_entries | Entries envelope |
+| `createMoodEntry({ body, logged_at? })` | POST /mood_entries | Created mood entry |
+| `deleteMoodEntry(id)` | DELETE /mood_entries/{id} | Message envelope |
+| `listWorkoutLogs({ date? })` | GET /workout_logs | Date and workouts envelope |
+| `listSleepLogs({ date? })` | GET /sleep_logs | Date and sleep sessions envelope |
+| `getFeed({ before? })` | GET /feed | Days and pagination cursor |
 
+The query object is optional on GET methods. Response properties remain
+optional or nullable exactly where declared by the source specification.
+Invalid requests, transport failures, non-2xx HTTP responses and invalid
+response shapes reject with `TallyApiError`.
+
+See the [API contract](https://github.com/angle-theory-studio/tally-sdk/blob/main/API_CONTRACT.md),
+[generated exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts),
+and [project README](https://github.com/angle-theory-studio/tally-sdk/blob/main/README.md).
+
+The capitalised entity interface, such as `client.FoodEntry()`, remains
+available. Its list methods return entity arrays and do not retain surrounding
+response metadata. Legacy create/parse/remove entity data can hold response
+envelopes; prefer `client.api` for operation-specific return types.
 
 ## Install
-This package is not yet published to npm. Install it from the GitHub
-release tag (`ts/vX.Y.Z`):
 
-- Releases: [https://github.com/angle-theory-studio/tally-sdk/releases](https://github.com/angle-theory-studio/tally-sdk/releases)
+This package has no npm release or release tag. Build the committed
+source using [SUBMISSION.md](https://github.com/angle-theory-studio/tally-sdk/blob/main/SUBMISSION.md). From the repository root:
 
+```sh
+cd ts
+npm ci
+npm run build
+npm test
+```
 
-## Tutorial: your first API call
+The CommonJS entry point is `ts/dist/TallySDK.js`; declarations are in
+`ts/dist/TallySDK.d.ts`. The package name below describes the prepared package,
+not an already published npm release.
 
-This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+## Client setup and legacy entity example
 
 ### 1. Create a client
 
@@ -34,162 +67,25 @@ const client = new TallySDK({
 
 ### 2. List feed records
 
-`list()` resolves to an array of Feed ENTITIES — every operation
-resolves to entities, not raw records. Iterate them directly, and call
-`.data()` on one for the record it holds:
+This legacy `list()` method resolves to an array of Feed entity
+instances. Call `.data()` on each returned instance to read its record.
+Use `client.api` to retain the complete response envelope and pagination metadata:
 
 ```ts
 const feeds = await client.Feed().list()
 
 for (const feed of feeds) {
-  console.log(feed)
+  console.log(feed.data())
 }
 ```
-
 
 ## Error handling
 
-Entity operations reject on failure, so wrap them in `try` / `catch`:
-
-```ts
-try {
-  const workoutlogs = await client.WorkoutLog().list()
-  console.log(workoutlogs)
-} catch (err) {
-  console.error('list failed:', err)
-}
-```
-
-The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
-
-```ts
-const result = await client.direct({
-  path: '/api/resource/{id}',
-  method: 'GET',
-  params: { id: 'example_id' },
-})
-
-if (result instanceof Error) {
-  throw result
-}
-```
-
-
-## How-to guides
-
-### Make a direct HTTP request
-
-For endpoints not covered by entity methods:
-
-```ts
-const result = await client.direct({
-  path: '/api/resource/{id}',
-  method: 'GET',
-  params: { id: 'example' },
-})
-
-if (result instanceof Error) {
-  throw result
-}
-if (result.ok) {
-  console.log(result.status)  // 200
-  console.log(result.data)    // response body
-}
-```
-
-### Prepare a request without sending it
-
-```ts
-const fetchdef = await client.prepare({
-  path: '/api/resource/{id}',
-  method: 'DELETE',
-  params: { id: 'example' },
-})
-
-// Inspect before sending
-console.log(fetchdef.url)
-console.log(fetchdef.method)
-console.log(fetchdef.headers)
-```
-
-### Use test mode
-
-Create a mock client for unit testing — no server required:
-
-```ts
-const client = TallySDK.test()
-
-const workoutlog = await client.WorkoutLog().list()
-// workoutlog is the entity, populated with mock response data
-// — call workoutlog.data() for the record itself
-console.log(workoutlog)
-```
-
-You can also use the instance method:
-
-```ts
-const client = new TallySDK({ apikey: '...' })
-const testClient = client.tester()
-```
-
-### Retain entity state across calls
-
-Entity instances remember their last match and data:
-
-```ts
-const entity = client.WorkoutLog()
-
-// First call runs the operation and stores its result
-await entity.list()
-
-// Subsequent calls reuse the stored state
-const data = entity.data()
-console.log(data.id)
-```
-
-### Add custom middleware
-
-Pass features via the `extend` option:
-
-```ts
-const logger = {
-  hooks: {
-    PreRequest: (ctx: any) => {
-      console.log('Requesting:', ctx.spec.method, ctx.spec.path)
-    },
-    PreResponse: (ctx: any) => {
-      console.log('Status:', ctx.out.request?.status)
-    },
-  },
-}
-
-const client = new TallySDK({
-  apikey: '...',
-  extend: [logger],
-})
-```
-
-### Run live tests
-
-Create a `.env.local` file at the project root:
-
-```
-TALLY_TEST_LIVE=TRUE
-TALLY_APIKEY=<your-key>
-```
-
-Then run:
-
-```bash
-cd ts && npm test
-```
-
-Live entity tests continue independent operations after errors and attempt
-supported cleanup. Their final result reports failures and missing prerequisites
-after the remaining work completes. The model and test inputs determine which
-API operations the generated scenarios cover.
-
+Recommended `client.api` calls reject with `TallyApiError`. Its `code` is
+`request_validation`, `transport`, `http` or `response_validation`.
+HTTP errors preserve the status and response body in `status` and
+`response`; inspect that body for the API's `error` or `errors` details.
+For transport failures, `cause` retains the underlying error when available.
 
 ## Reference
 
@@ -223,13 +119,13 @@ new TallySDK(options?: {
 | --- | --- | --- |
 | `options()` | `object` | Deep copy of current SDK options. |
 | `utility()` | `Utility` | Deep copy of the SDK utility object. |
-| `prepare(fetchargs?)` | `Promise<FetchDef>` | Build an HTTP request definition without sending it. |
-| `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
-| `Feed(data?)` | `FeedEntity` | Create a Feed entity instance. |
-| `FoodEntry(data?)` | `FoodEntryEntity` | Create a FoodEntry entity instance. |
-| `MoodEntry(data?)` | `MoodEntryEntity` | Create a MoodEntry entity instance. |
-| `SleepLog(data?)` | `SleepLogEntity` | Create a SleepLog entity instance. |
-| `WorkoutLog(data?)` | `WorkoutLogEntity` | Create a WorkoutLog entity instance. |
+| `prepare(fetchargs?)` | `Promise<FetchDef \| Error>` | Build an HTTP request definition without sending it. |
+| `direct(fetchargs?)` | `Promise<DirectResult \| Error>` | Build and send an HTTP request. |
+| `Feed(entopts?)` | `FeedEntity` | Create a Feed entity instance with optional entity options. |
+| `FoodEntry(entopts?)` | `FoodEntryEntity` | Create a FoodEntry entity instance with optional entity options. |
+| `MoodEntry(entopts?)` | `MoodEntryEntity` | Create a MoodEntry entity instance with optional entity options. |
+| `SleepLog(entopts?)` | `SleepLogEntity` | Create a SleepLog entity instance with optional entity options. |
+| `WorkoutLog(entopts?)` | `WorkoutLogEntity` | Create a WorkoutLog entity instance with optional entity options. |
 | `tester(testopts?, sdkopts?)` | `TallySDK` | Create a test-mode client instance. |
 
 #### Static methods
@@ -238,9 +134,13 @@ new TallySDK(options?: {
 | --- | --- | --- |
 | `TallySDK.test(testopts?, sdkopts?)` | `TallySDK` | Create a test-mode client. |
 
-### Entity interface
+### Legacy entity interface
 
-All entities share the same interface.
+Each entity exposes only the operations listed for it below. The data types
+are distinct from the entity classes. `FoodEntry.data()` and
+`MoodEntry.data()` use unions because different operations store different
+response shapes. The [exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+separate request bodies from responses.
 
 #### Methods
 
@@ -249,26 +149,28 @@ All entities share the same interface.
 | `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
 | `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
 | `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity. |
-| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |
-| `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
-| `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
+| `remove` | `remove(reqmatch?, ctrl?): Promise<Entity>` | Remove an entity. |
+| `data` | `data(data?: Partial<Data>): Data` | Get or set entity data. |
+| `match` | `match(match?: Partial<Data>): Partial<Data>` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
 | `client` | `client(): TallySDK` | Return the parent SDK client. |
 | `entopts` | `entopts(): object` | Return a copy of the entity options. |
 
 #### Return values
 
-Entity operations resolve to the entity data directly — there is no
-result envelope:
+On success, legacy entity operations return entity instances or arrays of
+instances. Read each instance with `.data()`; a raw response envelope may
+be stored there by create, parse or remove:
 
 - `create` and `update` resolve to a single entity object.
-- `list` resolves to an **array** of entity objects (iterate it directly;
-  there is no `.data` and no `.ok`).
-- `remove` resolves to `void`.
+- `list` resolves to an **array** of entity instances. The array has no `.data()` or `.ok`; call `.data()` on each item.
+- `remove` resolves to the entity instance and marks `.deleted()` as true.
 
-On a failed request these methods **throw**, so wrap calls in
-`try`/`catch` to handle errors. Only `direct()` returns the result
-envelope described below.
+Entity operations throw on failure by default. Disabling throwing through
+legacy control options changes that behavior. The recommended `client.api`
+methods always reject failures and return operation-specific JSON bodies on
+success. The low-level `direct()` method returns transport result information
+as described below.
 
 ### DirectResult shape
 
@@ -283,11 +185,17 @@ The `direct()` method returns:
 }
 ```
 
-On error, `ok` is `false` and an `err` property contains the error.
+For a non-2xx HTTP response, `ok` is false, `status` is the HTTP status,
+and `data` contains the parsed body when available; `err` is not guaranteed.
+Transport and permission failures can instead return `{ ok: false, err }`,
+and request preparation can return an `Error` directly. Check both forms.
+Unlike `client.api`, `direct()` does not validate the response against an
+operation schema; invalid JSON can leave `data` undefined even on HTTP success.
 
 ### FetchDef shape
 
-The `prepare()` method returns:
+On success, `prepare()` returns the following definition; on preparation or
+permission failure it returns an `Error`. It never sends the request:
 
 ```ts
 {
@@ -298,7 +206,11 @@ The `prepare()` method returns:
 }
 ```
 
-### Entities
+### Legacy entity field inventories
+
+The following tables combine fields inferred from requests and responses;
+they are not individual response schemas. Use the operation-specific
+[exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
 
 #### Feed
 
@@ -403,7 +315,11 @@ Create an instance: `const feed = client.Feed()`
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
 
-#### Fields
+#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -431,7 +347,11 @@ Create an instance: `const food_entry = client.FoodEntry()`
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
-#### Fields
+#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -476,7 +396,11 @@ Create an instance: `const mood_entry = client.MoodEntry()`
 | `list(match)` | List entities matching the criteria. |
 | `remove(match)` | Remove the matching entity. |
 
-#### Fields
+#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -510,7 +434,11 @@ Create an instance: `const sleep_log = client.SleepLog()`
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
 
-#### Fields
+#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -544,7 +472,11 @@ Create an instance: `const workout_log = client.WorkoutLog()`
 | --- | --- |
 | `list(match)` | List entities matching the criteria. |
 
-#### Fields
+#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -566,122 +498,38 @@ Create an instance: `const workout_log = client.WorkoutLog()`
 const workout_logs = await client.WorkoutLog().list()
 ```
 
-## Features
+## Entity state and transport
 
-This SDK ships 1 optional features. Each is **inactive until you
-switch it on**, so an SDK you have not configured behaves exactly as if none of
-them existed — no retries, no cache, no logging, no measurable overhead.
-
-Activate a feature by name in the client options, alongside the options shown
-above:
-
-| Feature | What it does |
-|---|---|
-| [`test`](#test) | Test transport |
-
-### test
-
-Test transport.
-
-| Option | Default |
-|---|---|
-| `active` | `false` |
-
-Set `feature.test.active` to enable it, then override any of the options above.
-
-
-## Advanced
-
-> The sections above cover everyday use. The material below explains the
-> SDK's internals — useful when extending it with custom features, but not
-> needed for normal use.
-
-### The operation pipeline
-
-Every entity operation follows a six-stage pipeline. Each stage fires a
-feature hook before executing:
-
-```
-PrePoint → PreSpec → PreRequest → PreResponse → PreResult → PreDone
-```
-
-- **PrePoint**: Resolves which API endpoint to call based on the
-  operation name and entity configuration.
-- **PreSpec**: Builds the HTTP spec — URL, method, headers, body —
-  from the resolved point and the caller's parameters.
-- **PreRequest**: Sends the HTTP request. Features can intercept here
-  to replace the transport (as TestFeature does with mocks).
-- **PreResponse**: Parses the raw HTTP response.
-- **PreResult**: Extracts the business data from the parsed response.
-- **PreDone**: Final stage before returning to the caller. Entity
-  state (match, data) is updated here.
-
-If any stage errors, the pipeline short-circuits and the error surfaces
-to the caller — see [Error handling](#error-handling) for how that looks
-in this language.
-
-### Features and hooks
-
-Features are the extension mechanism. A feature is an object with a
-`hooks` map. Each hook key is a pipeline stage name, and the value is
-a function that receives the context.
-
-The SDK ships with built-in features:
-
-- **TestFeature**: Test transport
-
-Features are initialized in order. Hooks fire in the order features
-were added, so later features can override earlier ones.
-
-### Module structure
-
-```
-tally/
-├── src/
-│   ├── TallySDK.ts        # Main SDK class
-│   ├── entity/             # Entity implementations
-│   ├── feature/            # Built-in features (Base, Test, Log)
-│   └── utility/            # Utility functions
-├── test/                   # Test suites
-└── dist/                   # Compiled output
-```
-
-Import the SDK from the package root:
+Legacy `list()` returns a new array of entity instances. Read those returned
+instances with `.data()`; the parent entity does not become the returned
+collection. Collection envelopes, totals and pagination metadata are available
+through the corresponding `client.api` method.
 
 ```ts
-import { TallySDK } from '@angle-theory-studio/tally-sdk'
+const parent = client.WorkoutLog()
+const workouts = await parent.list()
+for (const workout of workouts) {
+  console.log(workout.data())
+}
 ```
 
-### Entity state
+Successful create and update operations store their response data on the
+returned entity. Remove returns the same entity, stores the removal response
+and marks `.deleted()` true. Call `make()` for a fresh instance with the same
+client and options.
 
-Entity instances are stateful. After a successful `list`, the entity
-stores the returned data and match criteria internally. Subsequent
-calls on the same instance can rely on this state.
+The typed `client.api` methods use the existing `direct()` transport with
+configured authentication, base URL and `system.fetch`. They honor
+`allow.op` for `direct` and the configured `allow.method` restrictions.
+They validate declared request and response types and throw `TallyApiError`.
+The legacy entity feature pipeline and generic test feature are separate;
+use an injected `system.fetch` for offline tests of `client.api`.
 
-```ts
-const workoutlog = client.WorkoutLog()
-await workoutlog.list()
+The included test feature exercises legacy entities. The project also has
+[independent contract checks](https://github.com/angle-theory-studio/tally-sdk/tree/main/checks)
+covering complete responses, request placement, errors, permissions and types.
 
-// workoutlog.data() now returns the workoutlog data from the last `list`
-// workoutlog.match() returns the last match criteria
-```
+## Full reference
 
-Call `make()` to create a fresh instance with the same configuration
-but no stored state.
-
-### Direct vs entity access
-
-The entity interface handles URL construction, parameter placement,
-and response parsing automatically. Use it for standard CRUD operations.
-
-The `direct` method gives full control over the HTTP request. Use it
-for non-standard endpoints, bulk operations, or any path not modelled
-as an entity. The `prepare` method is useful for debugging — it
-shows exactly what `direct` would send.
-
-
-## Full Reference
-
-See [REFERENCE.md](REFERENCE.md) for complete API reference
-documentation including all method signatures, entity field schemas,
-and detailed usage examples.
+See the [API contract](https://github.com/angle-theory-studio/tally-sdk/blob/main/API_CONTRACT.md)
+and [legacy reference](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/REFERENCE.md).

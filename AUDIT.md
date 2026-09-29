@@ -1,34 +1,65 @@
-# Submission audit — 29 September 2026
+# Engineering verification record
 
-Separate AI reviewers checked engineering behavior, task requirements, documentation and publication readiness. The engineering reviewer implemented the response-mapping correction after reproducing it; final source-publication acceptance is reviewed separately. This is a bounded generator evaluation, not a production certification.
+Date: 29 September 2026. Scope: the Tally TypeScript source submission, its generator inputs, contract behavior, documentation and distributable. Authenticated server compatibility is a separate, unperformed check.
 
-## Corrected before delivery
+## Review structure
 
-1. **Food-list data loss.** The documented API response wraps records in `entries`. The generated mapping used the complete `body`, so a valid non-empty response became `[]`. A supported override in `.sdk/model/guide/guide.aontu` selects `body.entries`; the client was regenerated. `checks/api-contract.test.cjs` failed before the correction and passes afterward. It checks the URL, method, Bearer header, absence of a GET body and preservation of the returned record using an injected fetch with no network.
-2. **Packaging configuration.** An earlier source archive omitted the model and test build-action AONTU configuration. The published source includes both files so regeneration can load `apidef` and `sdkgen`. Generated config JSON and compiled output remain excluded.
-3. **Documentation.** Added source installation instructions and replaced incorrect multi-language release claims and unsupported security-response promises in root documentation.
-4. **Final publication re-audit.** Review of published commit `52238a7af56ddeda09875d868430a0ea3ec6c238` found that the root README, LICENSE and SECURITY policy had been overwritten by generation, contradicting the earlier report. Restored the submission entry point, candidate and upstream attribution, and candidate security guidance. The project overlay now disables the root `top` generation phase while retaining TypeScript generation, protecting these maintained files from the identified overwrite path. The previous publication-readiness conclusion was premature.
+Separate AI roles handled requirements and the API matrix, transport implementation, API/type implementation, release engineering, independent contract QA and independent acceptance. The acceptance reviewer did not implement the fixes. The coordinator integrated the work and checked a clean source copy. This separation is an evidence control, not a guarantee that no defect can remain.
 
-## Verification
+## Defects closed
+
+| Finding | Correction | Evidence |
+| --- | --- | --- |
+| Food list silently discarded valid entries | Guide mapping to `body.entries` followed by regeneration | Original regression failed before the fix; retained in contract tests |
+| DELETE repeated path ID in query | Canonical path arguments read from `point.args.params`; legacy metadata supported | Transport tests failed 3/10 before the correction and pass 10/10 after |
+| Request fields and response fields were conflated | Separate OpenAPI-derived request/response aliases; truthful legacy unions | Positive/negative consumer TypeScript fixture and build |
+| Aggregate values and feed cursor were unavailable through entity lists | Generated `client.api` exposes all 11 operations with complete envelopes | Independent fixtures verify every wire route, totals, cursor, nulls, unknown fields and ordering |
+| Errors could be mistaken for successful empty data | Typed companion rejects request validation, transport, HTTP and response-schema failures | HTTP 401/422, network, invalid JSON and malformed-schema fixtures |
+| Typed and direct requests bypassed the HTTP-method allowlist | Normalize and check exact method tokens in `prepare()` before transport | GET-only policy permits all five reads and rejects all six writes; direct/prepare reject forbidden and substring methods before fetch |
+| Unix-specific build and quoting | Node cleanup and cross-platform npm scripts; locked installs | Local clean build; Ubuntu/Windows CI configured for the same gates |
+| Package publication used a fresh unbuilt checkout | Manual workflow verifies and transfers the exact packed artifact | Missing-dist artifact is rejected; complete tarball loads outside the checkout |
+| Generated documentation contradicted candidate ownership and publication status | Corrected root docs, attribution, source installation and security guidance | Readable source instructions, tested README example, source/packed LICENSE |
+| Packaged reference mixed request and response fields and misstated entity return/state behavior | Generate a typed-API entry section and accurate legacy return/state guidance; label mixed field inventories | Independent review of generated README/reference against runtime and declarations |
+| Regeneration reverted maintained root docs | Disable supported root `top` phase while keeping target generation | Byte comparison of maintained files across generation |
+| Source export omitted model build configuration | Commit source AONTU configuration and exclude regenerated JSON | Fresh-source installation and full regeneration succeed |
+
+The earlier source-publication verdict at `52238a7…` was premature because published LICENSE/README/SECURITY still contradicted the report. This was corrected at `f12c78d…`; the subsequent engineering pass closes the known functional and packaging issues above. Generated client files are derived from source components/templates, not manually patched.
+
+## Executed checks
+
+Environment for local execution: Linux, Node.js 24.19.0, npm 11.9.0. The final clean source copy excluded dependencies, compiled output and generated model-configuration JSON.
 
 | Check | Observed result |
 | --- | --- |
-| TypeScript build | Exit 0 |
-| Generated offline suite | 209 total: 208 passed, one skipped (`FeatureCorpus / cost`, optional feature not selected), zero failed |
-| Food response regression | One failed before fix; one passed after fix |
-| Generator doctor | Exit 0, scaffold matches, zero additive |
-| Clean source regeneration after final correction | `npm ci --offline` and `npm run generate` exited 0; README, LICENSE, SECURITY, CHANGELOG and candidate CI/publish workflows remained byte-identical; TypeScript source also remained unchanged |
-| Live authenticated API | Not run |
-| npm publication | Not performed |
+| Locked installation in generator and TypeScript target | `npm ci --offline` exited 0, using the existing npm cache |
+| Complete generation from clean source | `npm run generate` exited 0 |
+| Regenerated source and maintained-file identity | 119 files compared; zero differences; temporary documentation-test snippets excluded |
+| Generated TypeScript build and tests | 209 tests: 208 passed, 1 skipped, 0 failed |
+| Skip reason | `FeatureCorpus / cost`; optional feature not selected, not a skipped API endpoint |
+| Independent API contract checks | 32 passed, including all 11 HTTP operations and method restrictions |
+| Actual README example | 2 passed: with and without a pagination cursor |
+| Transport regression checks | 20 passed, including direct/prepare method restrictions |
+| Combined independent checks | 54 passed, 0 skipped, 0 failed |
+| Strict consumer declarations | `checks/api-types.ts` passed with expected negative cases enforced |
+| npm tarball | 238 files; required runtime/declarations/license present; SHA512 checked |
+| Isolated packaged runtime | Imports without the source checkout; all 11 methods exported; injected GET preserves response and authentication |
+| Optional live script without credentials | Exits nonzero with an actionable message; does not report a skipped test as success |
 
-Build and test commands are in [SUBMISSION.md](SUBMISSION.md). The regression is additional to the 209 generated tests. Review of source and archive found no credentials using common secret patterns; this is not an exhaustive security guarantee.
+The clean-copy run repeated the generated suite, all 54 independent checks, consumer type checks and package verification successfully. These tests use fixed responses from the committed provider specification; they do not use a live Tally account.
 
-## Remaining generator observations
+## CI and publication gates
 
-- `FoodEntry.create()` and its parse action retain response envelopes in `.data()`, while the declared type is `FoodEntry`. The inferred type also requires `input`, absent from returned entry objects. Full response type fidelity is unverified (`ts/src/TallyTypes.ts`).
-- `Feed.list()` returns `body.days` without the `older_before` pagination metadata. The low-level `direct()` response retains the full envelope (`ts/src/Config.ts`, `.sdk/def/openapi.yaml`).
-- DELETE requests repeat the path ID as a query parameter, for example `/food_entries/11?id=11`. Query preparation reads `point.params`, whereas generated arguments are under `point.args.params`; server tolerance is untested (`ts/src/utility/PrepareQueryUtility.ts`).
-- Root README contains `Features: undefined`; generated installation guidance refers to release tags that do not exist. The candidate submission guide takes precedence for installation.
-- Manual npm publication verifies in one job and publishes from a separate clean checkout without transferring the compiled package output. Do not use that workflow for this source submission.
+[CI](.github/workflows/ci.yml) runs the actual TypeScript target on Ubuntu and Windows: locked install, build/generated tests, independent contract/example/transport tests, consumer type checks, package creation and isolated package verification. Absent language targets are no longer represented by misleading successful no-op jobs. [Documentation](.github/workflows/docgen.yml) generates and checks documentation separately. See [GitHub Actions](https://github.com/angle-theory-studio/tally-sdk/actions) for the published commit's platform-specific outcomes.
 
-These are recorded limitations for feedback to the generator authors. No claim is made that all API behavior is correct. Human work was not timed, and authenticated testing and free API-tier access were not established.
+The manual npm workflow defaults to verification. Its optional publish job consumes the verified tarball and has a separate tagging step. Local tests exercised registry decisions with controlled responses: new version and identical integrity accepted; conflicting integrity and HTTP 503 rejected. Actual registry publishing, trusted-publishing setup and OIDC authentication have not been exercised. No npm release or release tag has been created.
+
+## Remaining boundaries
+
+- No authenticated live request was made: a Tally token was unavailable. Free API-tier access, quotas and account permissions are not established.
+- Upstream response fields are mostly optional; the client does not invent required fields or stricter minimum values. Runtime validation covers declared JSON structure/types/required/enum/nullability, not additional date-format rules.
+- Legacy `list()` intentionally remains an entity array. Use `client.api` for complete aggregate values and cursors. Corrected legacy response unions can require TypeScript caller changes, documented in CHANGELOG.
+- Schema-derived validation is tied to the committed specification. Unexpected server shapes will produce an explicit validation error; offline tests cannot certify every real server variant.
+- The local fresh-install check used a populated npm cache. It does not prove registry availability on every machine.
+- Human work was not timed; compliance with the 30-minute human-work constraint cannot be claimed retrospectively.
+
+Reproduction commands are in [SUBMISSION.md](SUBMISSION.md). Exact operation contracts and source-spec identity are in [API_CONTRACT.md](API_CONTRACT.md).

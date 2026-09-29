@@ -80,24 +80,27 @@ const Package = cmp(async function Package(props: any) {
       } : {}),
 
       'pretest': 'npm run build',
-      'test': 'node --enable-source-maps --test-concurrency=1 --test \'dist-test/**/*.test.js\'',
-      'test-some': 'node --enable-source-maps --experimental-test-isolation=none ' +
-        '--test-name-pattern=\"$TEST_PATTERN\" --test \'dist-test/**/*.test.js\'',
+      'test': 'node --enable-source-maps --test-concurrency=1 --test "dist-test/**/*.test.js"',
+      'test-some': 'node -e "const r=require(\'node:child_process\').spawnSync(process.execPath,' +
+        '[\'--enable-source-maps\',\'--experimental-test-isolation=none\',' +
+        '\'--test-name-pattern=\'+(process.env.TEST_PATTERN||\'.*\'),\'--test\',\'dist-test/**/*.test.js\'],' +
+        '{stdio:\'inherit\'});if(r.error)throw r.error;process.exit(r.status??1)"',
       'test-utility': 'node --enable-source-maps --test test/utility/*.test.ts',
 
       'pretest-coverage': 'npm run build',
       'test-coverage': 'node --test-concurrency=1 --experimental-test-coverage ' +
-        '--test-coverage-exclude=\'**/dist-test/**\' ' +
+        '--test-coverage-exclude="**/dist-test/**" ' +
         '--test-coverage-lines=85 --test-coverage-branches=68 --test-coverage-functions=88 ' +
-        '--test \'dist-test/**/*.test.js\'',
+        '--test "dist-test/**/*.test.js"',
 
       "watch": "tsc --build src test -w",
       // Prune compiled output before building: `tsc --build` is incremental and
       // never deletes .js for a removed source, so entity tests that the model
       // folds away would otherwise keep running from stale dist-test/ and fail.
-      "build": "rm -rf dist dist-test && tsc --build src test",
-      "clean": "rm -rf node_modules yarn.lock package-lock.json dist dist-test",
-      "reset": "npm run clean && npm i && npm run build && npm test",
+      "build": "node -e \"for (const p of ['dist','dist-test']) require('node:fs').rmSync(p,{recursive:true,force:true})\" && tsc --build src test --force",
+      // Preserve the lockfile so a reset installs the same dependencies.
+      "clean": "node -e \"for (const p of ['node_modules','dist','dist-test']) require('node:fs').rmSync(p,{recursive:true,force:true})\"",
+      "reset": "npm run clean && npm ci && npm test",
     },
     author,
 

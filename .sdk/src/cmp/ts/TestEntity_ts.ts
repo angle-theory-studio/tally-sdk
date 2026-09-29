@@ -431,7 +431,7 @@ const generateUpdate: OpGen = (ctx, step, index) => {
     const ${resdatavar} = (await ${entvar}.update(${datavar})).data()
 `)
   if (hasEntIdU) {
-    Content(`    assert(${resdatavar}.id === ${datavar}.id)
+    Content(`    assert('id' in ${resdatavar} && ${resdatavar}.id === ${datavar}.id)
 `)
   }
   else {

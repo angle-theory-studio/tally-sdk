@@ -1,49 +1,56 @@
 # Voxgig mini Task 1
 
-Unofficial **TypeScript** SDK for the personal nutrition tracker at [logwithtally.com](https://www.logwithtally.com), generated using Voxgig's SDK tools. This is not Tally Forms or Tally's governance API.
+Unofficial TypeScript SDK for [Tally's personal nutrition tracker](https://www.logwithtally.com), generated with Voxgig SDK tools and customized through the project's model, components and templates.
 
 Candidate profile: [angle-theory-studio](https://github.com/angle-theory-studio). Repository: [tally-sdk](https://github.com/angle-theory-studio/tally-sdk).
 
-## Result and scope
+## Deliverables
 
-- Generated five entity classes from an upstream definition containing eight paths and eleven HTTP operations; this does not establish complete SDK operation coverage.
-- Build succeeded on Linux with Node.js 24.19.0 and npm 11.9.0.
-- Generated offline tests: **209 total, 208 passed, one skipped, zero failed**. The skipped `FeatureCorpus / cost` test concerns an optional feature not selected for this SDK.
-- A separate API-contract regression check passes after correcting the inferred food-list response mapping. It failed against the original generated mapping.
-- Generator `doctor` reported that the scaffold matches. This is a scaffold check, not proof of API compatibility.
-- No authenticated live API request was made: an API token was not available. Availability of a free API tier was not verified.
-- Source is MIT licensed with upstream attribution retained. No npm package, release tag, or other language target is published as part of this submission.
-- AI was used to select the API, run generation and checks, and prepare documentation. Human time was not measured, so compliance with the 30-minute human-work limit is not claimed.
+- The original provider specification, generator configuration, templates, generated TypeScript source and lockfiles.
+- A typed `client.api` method for each of the 11 documented HTTP operations, with complete response envelopes and declared-schema validation.
+- The original entity API; corrected request/response aliases and a fix for duplicate path IDs in query parameters.
+- Independent request/response fixtures, positive and negative TypeScript usage checks, executable README checks and package verification.
+- MIT licensing with candidate and upstream attribution, an English [DX report](DX_REPORT.md), [contract matrix](API_CONTRACT.md) and [verification record](AUDIT.md).
 
-See [DX_REPORT.md](DX_REPORT.md) for the short developer experience report.
+The response types follow upstream optional/nullable fields. Unknown response properties are retained. Authentication, base URL, injected fetch and the original direct-operation permission gate remain in use. The companion rejects HTTP failures, transport failures and response schema violations. Legacy `.data()` declarations now expose response unions where the actual response varies by operation; existing TypeScript callers may need narrowing.
 
-## Build and test the source
+## Build and verify
 
-Prerequisites: Git, Node.js 24 and npm. Clone this repository, then enter the TypeScript target:
+Prerequisites: Git and Node.js 24 with npm. These commands use cross-platform Node cleanup; they do not require Unix `rm`.
 
 ```sh
 git clone https://github.com/angle-theory-studio/tally-sdk.git
 cd tally-sdk/ts
 npm ci
-node -e "for (const p of ['dist','dist-test']) require('node:fs').rmSync(p,{recursive:true,force:true})"
-npx tsc --build src test --force
-node --enable-source-maps --test-concurrency=1 --test "dist-test/**/*.test.js"
-node --test ../checks/api-contract.test.cjs
+npm test
+cd ..
+node --test "checks/*.test.cjs"
+node ts/node_modules/typescript/bin/tsc --strict --noEmit --skipLibCheck --target ES2022 --module NodeNext --moduleResolution NodeNext checks/api-types.ts
 ```
 
-The explicit commands avoid the Unix `rm -rf` in the generated npm build script. They were checked on Linux; Windows was not available for execution testing. After compiling, the CommonJS entry point is `ts/dist/TallySDK.js` and the declaration file is `ts/dist/TallySDK.d.ts`.
+`npm test` first compiles the client and generated tests. The separate checks verify actual request/response contracts and documentation. See [AUDIT.md](AUDIT.md) for observed results and operating-system coverage.
 
-From inside `ts/`, check that the compiled entry point loads:
+After compilation, require `./ts/dist/TallySDK.js` from the repository root. Type declarations are in `ts/dist/TallySDK.d.ts`. No npm package or Git release tag has been published.
+
+## Verify the distributable
+
+From the repository root:
 
 ```sh
-node -e "const {TallySDK}=require('./dist/TallySDK.js'); console.log(typeof TallySDK)"
+node -e "require('node:fs').mkdirSync('package-output',{recursive:true})"
+cd ts
+npm pack --json --ignore-scripts --pack-destination ../package-output > ../package-output/pack.json
+cd ..
+node checks/package-artifact.cjs package-output/pack.json
 ```
 
-The expected output is `function`. This check does not contact the API.
+The verifier checks required files, SHA512 integrity and an isolated Node process importing the extracted package. It also exercises the packed `api` client with an injected response. The helper requires `tar`, available in the Linux and Windows GitHub runners used by CI.
+
+The manual publishing workflow defaults to verification only. Actual npm publication requires separate configuration of npm trusted publishing and explicit selection of `publish=true`. It publishes the verified tarball rather than a fresh unbuilt checkout. Registry publication and OIDC authentication are not claimed as tested by local package checks.
 
 ## Reproduce generation
 
-The original upstream definition is committed at `.sdk/def/openapi.yaml`. Source configuration for the model and test build actions is also committed. For the existing project:
+From the repository root:
 
 ```sh
 cd .sdk
@@ -51,14 +58,27 @@ npm ci
 npm run generate
 ```
 
-Run this block from the repository root. Generated client source is not hand-patched. Candidate metadata is in the project model overlay; the food-list response correction is in `.sdk/model/guide/guide.aontu`. Root documentation, licensing and release configuration are candidate-maintained. The project overlay disables the generator's root `top` phase so it does not overwrite these files; TypeScript target generation remains enabled. Review root documentation and release configuration manually when the target or toolchain changes.
+The official specification is `.sdk/def/openapi.yaml`. Its 11 HTTP operations are explicitly mapped to method names because the upstream definition has no `operationId`; a changed operation set fails generation until that mapping is updated. Types and runtime schemas are derived from the resolved upstream schemas, not an independently maintained response copy.
 
-Verified from a fresh copy of the submitted source using `npm ci --offline` with a populated npm cache, followed by `npm run generate`: both succeeded. Root README, LICENSE, SECURITY, CHANGELOG and the candidate CI/publish workflows remained byte-identical; TypeScript source was unchanged. This check did not verify availability of dependencies from the public npm registry on a machine without a cache.
+- Project metadata and `top.active:false`: `.sdk/model/project.aontu`.
+- Food-list response mapping: `.sdk/model/guide/guide.aontu`.
+- Typed API, schema emission and legacy aliases: `.sdk/src/cmp/ts/`.
+- Validation and query transport: `.sdk/tm/ts/src/`.
 
-## Known generated limitations
+Generated client files are not patched by hand. The root `top` phase is disabled to preserve candidate-maintained documentation, attribution and release configuration; review these files manually when changing project targets or the toolchain. Separate docgen commands can still update their own outputs.
 
-The generated README has `Features: undefined` and points to unavailable release tags. The original generated changelog claimed targets not present in this project, and its security policy named Voxgig with an unsupported response-time promise; the root changelog and security policy were corrected for this candidate-owned submission.
+## Optional authenticated read-only check
 
-The generated npm publishing workflow is **not ready for release**: its publish job starts from a fresh checkout without the compiled output produced in the verification job. It is manual and was not run. This task publishes source only.
+Obtain a token from your own Tally account using the provider's documented Settings → API Access flow. Keep it in the process environment under `TALLY_APIKEY`. After building, run:
 
-Response types, feed pagination metadata and redundant DELETE query parameters still have limitations described in [AUDIT.md](AUDIT.md). Offline tests do not prove full live API compatibility.
+```sh
+node checks/live-readonly.cjs
+```
+
+This explicit opt-in script makes five GET requests, has a timeout and prints only operation status. It does not print the token or personal records and does not create, modify or delete account data. It is excluded from default offline tests. Missing credentials cause a nonzero exit, not a successful skipped test.
+
+## Limits of the submission
+
+Authenticated live calls have not been performed because a Tally API key was unavailable. Free API-tier availability and account-specific permissions have not been established. The supplied OpenAPI contract and injected responses are the basis of offline verification.
+
+Human effort was not timed, so compliance with the assignment's 30-minute human-work limit cannot be confirmed. AI performed additional engineering and QA at the candidate's direction. No claim is made that every possible server response, deployment environment or real-account workflow has been tested.

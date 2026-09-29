@@ -40,13 +40,19 @@ npm run build                 # compile .sdk/src/cmp -> .sdk/dist
 npm run generate              # emit/refresh the SDK into ../<lang>
 ```
 
-`generate` **merges** into existing files and does **not** re-apply
-placeholder substitution to merged content. If you ever see a literal
-`ProjectName` or `GOMODULE` in generated output, delete that one file and
-regenerate it fresh:
+This project's `.sdk/build/sdkgen.js` explicitly configures **overwrite** for
+generated text. Edit the model, templates or components, then regenerate;
+manual edits in `ts/` will be lost. The project overlay disables the root `top`
+phase so candidate-maintained README, attribution, security policy and release
+configuration remain under manual review. This does not block separate docgen
+commands from updating their own workflow or output.
+
+If a literal `ProjectName` or `GOMODULE` appears in generated output, inspect
+the owning template/component, correct it, then regenerate:
 
 ```bash
-rm <lang>/<the-file-with-the-placeholder>
+cd .sdk
+npm run build
 npm run generate
 ```
 

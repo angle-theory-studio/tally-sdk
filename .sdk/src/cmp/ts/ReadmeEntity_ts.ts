@@ -84,7 +84,11 @@ const ReadmeEntity = cmp(function ReadmeEntity(props: any) {
     }
 
     if (fields.length > 0) {
-      Content(`#### Fields
+      Content(`#### Legacy combined field inventory
+
+These inferred fields combine requests and responses. Use the
+[exact operation types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+for required fields, enums and nullability.
 
 | Field | Type | Description |
 | --- | --- | --- |

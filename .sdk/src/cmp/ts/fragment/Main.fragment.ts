@@ -16,6 +16,8 @@ const stdutil = new Utility()
 
 
 class ProjectNameSDK {
+  /** Typed full-response operations generated from the OpenAPI contract. */
+  readonly api = new TallyApi(this)
   _mode: string = 'live'
   _options: any
   _utility = new Utility()
@@ -117,13 +119,26 @@ class ProjectNameSDK {
     }, this._rootctx)
 
     const options = this._options
+    const requestedMethod = fetchargs.method || 'GET'
+    if (typeof requestedMethod !== 'string') {
+      return ctx.error('spec_method_invalid', 'The HTTP method must be a string')
+    }
+    const method = requestedMethod.toUpperCase()
+    // Raw and typed companion requests must obey the same method restrictions
+    // as entity operations. Match complete tokens, never a substring of GET.
+    const allowedMethods = options.allow.method.split(',')
+      .map((allowed: string) => allowed.trim().toUpperCase())
+    if (!allowedMethods.includes(method)) {
+      return ctx.error('spec_method_allow', 'Method "' + method +
+        '" not allowed by SDK option allow.method value: "' + options.allow.method + '"')
+    }
 
     const spec: any = {
       base: options.base,
       prefix: options.prefix,
       suffix: options.suffix,
       path: fetchargs.path || '',
-      method: fetchargs.method || 'GET',
+      method,
       params: fetchargs.params || {},
       query: fetchargs.query || {},
       headers: prepareHeaders(ctx),

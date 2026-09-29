@@ -1,6 +1,14 @@
 # Local config / secrets
 *.local.*
 *.local
+.env
+.env.*
+!.env.example
+
+# Rebuilt model configuration output; the source .aontu files are committed.
+.sdk/model/.model-config/*.json
+.sdk/test/.model-config/*.json
+package-output/
 
 # Dependencies (no trailing slash: also ignores node_modules SYMLINKS, e.g.
 # ts/node_modules -> shared tree, which a dir-only rule leaves tracked)

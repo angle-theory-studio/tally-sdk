@@ -30,6 +30,7 @@ import { Gitignore } from './Gitignore_ts'
 import { MainEntity } from './MainEntity_ts'
 import { EntityBase } from './EntityBase_ts'
 import { EntityTypes } from './EntityTypes_ts'
+import { ApiContract } from './ApiContract_ts'
 import { SdkError } from './SdkError_ts'
 
 
@@ -82,6 +83,9 @@ const Main = cmp(async function Main(props: any) {
       })
 
       Line(`export type * from './${model.const.Name}Types'\n`)
+      Line(`import { TallyApi } from './TallyApi'`)
+      Line(`export { TallyApi, TallyApiError } from './TallyApi'`)
+      Line(`export type { TallyApiErrorCode } from './ApiValidation'`)
 
       Fragment(
         {
@@ -173,6 +177,7 @@ if (fres instanceof Promise) { await fres }
     Schema({ target })
     EntityBase({ target })
     EntityTypes({ target })
+    ApiContract({ target })
 
   })
 })

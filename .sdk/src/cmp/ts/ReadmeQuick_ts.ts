@@ -75,15 +75,15 @@ const client = ${ctor}
     if (opnames.includes('list')) {
       Content(`### 2. List ${eName.toLowerCase()} records
 
-\`list()\` resolves to an array of ${eName} ENTITIES — every operation
-resolves to entities, not raw records. Iterate them directly, and call
-\`.data()\` on one for the record it holds:
+This legacy \`list()\` method resolves to an array of ${eName} entity
+instances. Call \`.data()\` on each returned instance to read its record.
+Use \`client.api\` to retain the complete response envelope and pagination metadata:
 
 \`\`\`ts
 const ${eVar}s = await client.${eName}().list(${listMatchArg(exampleEntity)})
 
 for (const ${eVar} of ${eVar}s) {
-  console.log(${eVar})
+  console.log(${eVar}.data())
 }
 \`\`\`
 
@@ -144,7 +144,7 @@ ${neMatchLines.join('\n')}
 \`\`\`ts
 try {
   const ${eVar} = await client.${eName}().load(${loadArg})
-  console.log(${eVar})
+  console.log(${eVar}.data())
 } catch (err) {
   console.error('load failed:', err)
 }

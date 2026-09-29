@@ -1,64 +1,46 @@
-
 import { cmp, Content } from '@voxgig/sdkgen'
 
-import {
-  KIT,
-  getModelPath,
-  nom,
-} from '@voxgig/apidef'
+const ReadmeIntro = cmp(function ReadmeIntro(_props: { target?: unknown }) {
+  Content(`# Tally TypeScript SDK
 
+Unofficial TypeScript SDK for the [Tally nutrition tracker](https://www.logwithtally.com), generated with Voxgig SDK tools.
 
-const ReadmeIntro = cmp(function ReadmeIntro(props: any) {
-  const { target, ctx$: { model } } = props
-  const info = (model.main && model.main.kit && model.main.kit.info) || {}
-  const tagline = info.tagline || ''
+## Recommended API
 
-  const entity = getModelPath(model, `main.${KIT}.entity`)
-  const exampleEntity = Object.values(entity).find((e: any) => e.active !== false) as any
-  const eName = exampleEntity ? nom(exampleEntity, 'Name') : 'Entity'
+Use \`client.api\` for all 11 documented HTTP operations. Each method returns
+its complete, typed JSON response and checks the declared response schema.
+Food entries retain daily totals, remaining macros and goals; feed responses
+retain \`older_before\` for pagination. Create and preview are separate methods.
 
-  // Model-driven op list — only the operations the active entities actually
-  // expose (a read-only entity has just list+load); never claim
-  // create/update/remove exist when no entity has them.
-  const CANON_OPS = ['list', 'load', 'create', 'update', 'remove']
-  const opSet = new Set<string>()
-  Object.values(entity || {}).forEach((e: any) => {
-    if (!e || e.active === false) return
-    Object.keys(e.op || {}).forEach((o: string) => {
-      if (e.op[o] && e.op[o].active !== false) opSet.add(o)
-    })
-  })
-  const opNames = CANON_OPS.filter((o) => opSet.has(o))
-    .concat([...opSet].filter((o) => !CANON_OPS.includes(o)))
-  const opList = (opNames.length ? opNames : ['list', 'load'])
-    .map((o) => '`' + o + '`').join(', ')
+| Method | HTTP endpoint | Response |
+| --- | --- | --- |
+| \`listFoodEntries({ date? })\` | GET /food_entries | Entries, totals, remaining macros, goals and date |
+| \`createFoodEntries({ input, meal_type?, date? })\` | POST /food_entries | All created entries, totals and remaining macros |
+| \`parseFoodEntries({ input, meal_type? })\` | POST /food_entries/parse | Preview with raw input, meal type and parsed entries |
+| \`updateFoodEntry(id, { entry? })\` | PATCH /food_entries/{id} | Updated food entry |
+| \`deleteFoodEntry(id)\` | DELETE /food_entries/{id} | Message, totals and remaining macros |
+| \`listMoodEntries({ date? })\` | GET /mood_entries | Entries envelope |
+| \`createMoodEntry({ body, logged_at? })\` | POST /mood_entries | Created mood entry |
+| \`deleteMoodEntry(id)\` | DELETE /mood_entries/{id} | Message envelope |
+| \`listWorkoutLogs({ date? })\` | GET /workout_logs | Date and workouts envelope |
+| \`listSleepLogs({ date? })\` | GET /sleep_logs | Date and sleep sessions envelope |
+| \`getFeed({ before? })\` | GET /feed | Days and pagination cursor |
 
-  const targets = getModelPath(model, `main.${KIT}.target`) || {}
-  const siblings = Object.entries(targets)
-    .filter(([name, t]: any) => name !== target.name && false !== t.active)
-    .map(([name]: any) => name)
-    .sort()
+The query object is optional on GET methods. Response properties remain
+optional or nullable exactly where declared by the source specification.
+Invalid requests, transport failures, non-2xx HTTP responses and invalid
+response shapes reject with \`TallyApiError\`.
 
-  const siblingNote = 0 === siblings.length ? '' : `
-> Also generated from this model: ${siblings.map((s: string) => '`' + s + '`').join(', ')} — see
-> the [top-level README](../README.md).
-`
+See the [API contract](https://github.com/angle-theory-studio/tally-sdk/blob/main/API_CONTRACT.md),
+[generated exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts),
+and [project README](https://github.com/angle-theory-studio/tally-sdk/blob/main/README.md).
 
-  Content(`# ${model.Name} ${target.title} SDK
+The capitalised entity interface, such as \`client.FoodEntry()\`, remains
+available. Its list methods return entity arrays and do not retain surrounding
+response metadata. Legacy create/parse/remove entity data can hold response
+envelopes; prefer \`client.api\` for operation-specific return types.
 
-${tagline}
-
-The ${target.title} SDK for the ${model.Name} API — a type-safe, entity-oriented client with full async/await support.
-
-The API is exposed as capitalised, semantic **Entities** — e.g.
-\`client.${eName}()\` — each with a small set of operations (${opList})
-instead of raw URL paths and query parameters. This keeps the surface
-predictable and low-friction for both humans and AI agents.
-${siblingNote}
 `)
 })
 
-
-export {
-  ReadmeIntro
-}
+export { ReadmeIntro }

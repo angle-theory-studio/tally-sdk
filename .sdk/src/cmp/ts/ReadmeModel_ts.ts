@@ -25,7 +25,7 @@ const ReadmeModel = cmp(function ReadmeModel(props: any) {
     list: '| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |',
     create: '| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |',
     update: '| `update` | `update(reqdata?, ctrl?): Promise<Entity>` | Update an existing entity. |',
-    remove: '| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |',
+    remove: '| `remove` | `remove(reqmatch?, ctrl?): Promise<Entity>` | Remove an entity. |',
   }
   const opRows = ['load', 'list', 'create', 'update', 'remove']
     .filter((o) => opUnion.has(o)).map((o) => opRowDefs[o]).join('\n')
@@ -40,10 +40,10 @@ const ReadmeModel = cmp(function ReadmeModel(props: any) {
     retBullets.push(`- ${joined} ${singleOps.length > 1 ? 'resolve' : 'resolves'} to a single entity object.`)
   }
   if (opUnion.has('list')) {
-    retBullets.push('- `list` resolves to an **array** of entity objects (iterate it directly;\n  there is no `.data` and no `.ok`).')
+    retBullets.push('- `list` resolves to an **array** of entity instances. The array has no `.data()` or `.ok`; call `.data()` on each item.')
   }
   if (opUnion.has('remove')) {
-    retBullets.push('- `remove` resolves to `void`.')
+    retBullets.push('- `remove` resolves to the entity instance and marks `.deleted()` as true.')
   }
   const returnBullets = retBullets.join('\n')
 
@@ -98,13 +98,13 @@ ${serverOptionRow}${apikeyOptionRow}${secretOptionRow}| \`base\` | \`string\` | 
 | --- | --- | --- |
 | \`options()\` | \`object\` | Deep copy of current SDK options. |
 | \`utility()\` | \`Utility\` | Deep copy of the SDK utility object. |
-| \`prepare(fetchargs?)\` | \`Promise<FetchDef>\` | Build an HTTP request definition without sending it. |
-| \`direct(fetchargs?)\` | \`Promise<DirectResult>\` | Build and send an HTTP request. |
+| \`prepare(fetchargs?)\` | \`Promise<FetchDef \\| Error>\` | Build an HTTP request definition without sending it. |
+| \`direct(fetchargs?)\` | \`Promise<DirectResult \\| Error>\` | Build and send an HTTP request. |
 `)
 
   each(entityList, (ent: any) => {
     const article = /^[aeiou]/i.test(ent.Name) ? 'an' : 'a'
-    Content(`| \`${ent.Name}(data?)\` | \`${ent.Name}Entity\` | Create ${article} ${ent.Name} entity instance. |
+    Content(`| \`${ent.Name}(entopts?)\` | \`${ent.Name}Entity\` | Create ${article} ${ent.Name} entity instance with optional entity options. |
 `)
   })
 
@@ -116,31 +116,38 @@ ${serverOptionRow}${apikeyOptionRow}${secretOptionRow}| \`base\` | \`string\` | 
 | --- | --- | --- |
 | \`${model.const.Name}SDK.test(testopts?, sdkopts?)\` | \`${model.const.Name}SDK\` | Create a test-mode client. |
 
-### Entity interface
+### Legacy entity interface
 
-All entities share the same interface.
+Each entity exposes only the operations listed for it below. The data types
+are distinct from the entity classes. \`FoodEntry.data()\` and
+\`MoodEntry.data()\` use unions because different operations store different
+response shapes. The [exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+separate request bodies from responses.
 
 #### Methods
 
 | Method | Signature | Description |
 | --- | --- | --- |
 ${opRows}
-| \`data\` | \`data(data?: Partial<Entity>): Entity\` | Get or set entity data. |
-| \`match\` | \`match(match?: Partial<Entity>): Partial<Entity>\` | Get or set entity match criteria. |
+| \`data\` | \`data(data?: Partial<Data>): Data\` | Get or set entity data. |
+| \`match\` | \`match(match?: Partial<Data>): Partial<Data>\` | Get or set entity match criteria. |
 | \`make\` | \`make(): Entity\` | Create a new instance with the same options. |
 | \`client\` | \`client(): ${model.const.Name}SDK\` | Return the parent SDK client. |
 | \`entopts\` | \`entopts(): object\` | Return a copy of the entity options. |
 
 #### Return values
 
-Entity operations resolve to the entity data directly — there is no
-result envelope:
+On success, legacy entity operations return entity instances or arrays of
+instances. Read each instance with \`.data()\`; a raw response envelope may
+be stored there by create, parse or remove:
 
 ${returnBullets}
 
-On a failed request these methods **throw**, so wrap calls in
-\`try\`/\`catch\` to handle errors. Only \`direct()\` returns the result
-envelope described below.
+Entity operations throw on failure by default. Disabling throwing through
+legacy control options changes that behavior. The recommended \`client.api\`
+methods always reject failures and return operation-specific JSON bodies on
+success. The low-level \`direct()\` method returns transport result information
+as described below.
 
 ### DirectResult shape
 
@@ -155,11 +162,17 @@ The \`direct()\` method returns:
 }
 \`\`\`
 
-On error, \`ok\` is \`false\` and an \`err\` property contains the error.
+For a non-2xx HTTP response, \`ok\` is false, \`status\` is the HTTP status,
+and \`data\` contains the parsed body when available; \`err\` is not guaranteed.
+Transport and permission failures can instead return \`{ ok: false, err }\`,
+and request preparation can return an \`Error\` directly. Check both forms.
+Unlike \`client.api\`, \`direct()\` does not validate the response against an
+operation schema; invalid JSON can leave \`data\` undefined even on HTTP success.
 
 ### FetchDef shape
 
-The \`prepare()\` method returns:
+On success, \`prepare()\` returns the following definition; on preparation or
+permission failure it returns an \`Error\`. It never sends the request:
 
 \`\`\`ts
 {
@@ -170,7 +183,11 @@ The \`prepare()\` method returns:
 }
 \`\`\`
 
-### Entities
+### Legacy entity field inventories
+
+The following tables combine fields inferred from requests and responses;
+they are not individual response schemas. Use the operation-specific
+[exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
 
 `)
 

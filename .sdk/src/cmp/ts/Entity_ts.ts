@@ -35,7 +35,8 @@ const Entity = cmp(function Entity(props: any) {
   // A TS/JS global (Record, Array, Promise, ...) would shadow itself for
   // the rest of the file — see tsSafeTypeName. The runtime `this.Name`
   // string stays entity.Name; only the TYPE reference is ever renamed.
-  const dataType = tsSafeTypeName(entity.Name)
+  const dataType = ['FoodEntry', 'MoodEntry'].includes(entity.Name)
+    ? entity.Name + 'Data' : tsSafeTypeName(entity.Name)
 
   const typeNames = [dataType]
   const opnamesAll = Object.keys(entity.op || {})

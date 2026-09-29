@@ -39,8 +39,8 @@ const OP_SIGNATURES: Record<string, { sig: string, returns: string, desc: string
   },
   remove: {
     sig: 'remove(match: object, ctrl?: object)',
-    returns: 'Promise<void>',
-    desc: 'Remove the entity matching the given criteria.',
+    returns: 'Promise<Entity>',
+    desc: 'Remove the matching entity; return the entity instance with deleted() set to true.',
   },
 }
 
@@ -59,7 +59,14 @@ const ReadmeRef = cmp(function ReadmeRef(props: any) {
 
     Content(`# ${model.Name} ${target.title} SDK Reference
 
-Complete API reference for the ${model.Name} ${target.title} SDK.
+Legacy entity reference for the ${model.Name} ${target.title} SDK.
+
+For the recommended \`client.api\` methods covering all 11 HTTP operations,
+see the [API contract](https://github.com/angle-theory-studio/tally-sdk/blob/main/API_CONTRACT.md)
+and [project README](https://github.com/angle-theory-studio/tally-sdk/blob/main/README.md).
+These methods return complete response bodies, including totals and pagination.
+The [generated exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+are authoritative for request/response fields, enums and nullability.
 
 
 ## ${model.Name}SDK
@@ -122,7 +129,7 @@ const client = ${model.Name}SDK.test()
 
     // Entity factory methods
     publishedEntities.map((ent: any) => {
-      Content(`#### \`${ent.Name}(data?: object)\`
+      Content(`#### \`${ent.Name}(entopts?: object)\`
 
 Create a new \`${ent.Name}\` entity instance.
 
@@ -130,7 +137,7 @@ Create a new \`${ent.Name}\` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| \`data\` | \`object\` | Initial entity data. |
+| \`entopts\` | \`object\` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** \`${ent.Name}Entity\` instance.
 
@@ -215,13 +222,19 @@ const ${eVar} = client.${ent.Name}()
 
       // Field schema
       if (fields.length > 0) {
-        Content(`### Fields
+        Content(`### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food \`input\` is required
+by create and parse requests and is not a field on returned \`FoodEntry\` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
 `)
         each(fields, (field: any) => {
-          const req = field.r ? 'Yes' : 'No'
+          const req = field.r ? 'Required in applicable request; see exact types' : 'Operation-specific; see exact types'
           const desc = field.sh || ''
           Content(`| \`${field.n}\` | \`${canonToType(field.t, target.name)}\` | ${req} | ${desc} |
 `)
@@ -277,13 +290,14 @@ remaining keys are sent as that action's payload.
         })
 
         Content(`
-An action returns that action's OWN response, which is not necessarily a
-${ent.Name} record — check the API definition for its shape.
+The legacy action resolves to an entity instance whose \`.data()\` contains
+that action's response envelope. For a typed preview response, use
+\`client.api.parseFoodEntries({ input: 'eggs' })\`.
 
 \`\`\`ts
 const result = await client.${ent.Name}().${actions[0].op}({
   $action: '${actions[0].action}',
-  /* ...the action's own arguments */
+  input: '2 scrambled eggs',
 })
 \`\`\`
 
@@ -364,7 +378,7 @@ const result = await client.${ent.Name}().create({
                 it.name === idF ? ent.name + '_id' : it.name)},\n`).join('')
             Content(`\`\`\`ts
 const result = await client.${ent.Name}().update({
-${updateLines}  // Fields to update
+${updateLines}  entry: { name: 'Updated food name' },
 })
 \`\`\`
 

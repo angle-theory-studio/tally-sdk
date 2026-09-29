@@ -15,13 +15,13 @@ import type {
 } from '../types'
 
 import type {
-  MoodEntry,
+  MoodEntryData,
   MoodEntryListMatch,
   MoodEntryCreateData,
   MoodEntryRemoveMatch,
 } from '../TallyTypes'
 
-class MoodEntryEntity extends TallyEntityBase<MoodEntry> {
+class MoodEntryEntity extends TallyEntityBase<MoodEntryData> {
 
   constructor(client: TallySDK, entopts: any) {
     super(client, entopts)

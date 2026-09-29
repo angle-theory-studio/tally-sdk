@@ -1,6 +1,13 @@
 # Tally TypeScript SDK Reference
 
-Complete API reference for the Tally TypeScript SDK.
+Legacy entity reference for the Tally TypeScript SDK.
+
+For the recommended `client.api` methods covering all 11 HTTP operations,
+see the [API contract](https://github.com/angle-theory-studio/tally-sdk/blob/main/API_CONTRACT.md)
+and [project README](https://github.com/angle-theory-studio/tally-sdk/blob/main/README.md).
+These methods return complete response bodies, including totals and pagination.
+The [generated exact types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts)
+are authoritative for request/response fields, enums and nullability.
 
 
 ## TallySDK
@@ -49,7 +56,7 @@ const client = TallySDK.test()
 
 ### Instance Methods
 
-#### `Feed(data?: object)`
+#### `Feed(entopts?: object)`
 
 Create a new `Feed` entity instance.
 
@@ -57,11 +64,11 @@ Create a new `Feed` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `data` | `object` | Initial entity data. |
+| `entopts` | `object` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** `FeedEntity` instance.
 
-#### `FoodEntry(data?: object)`
+#### `FoodEntry(entopts?: object)`
 
 Create a new `FoodEntry` entity instance.
 
@@ -69,11 +76,11 @@ Create a new `FoodEntry` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `data` | `object` | Initial entity data. |
+| `entopts` | `object` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** `FoodEntryEntity` instance.
 
-#### `MoodEntry(data?: object)`
+#### `MoodEntry(entopts?: object)`
 
 Create a new `MoodEntry` entity instance.
 
@@ -81,11 +88,11 @@ Create a new `MoodEntry` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `data` | `object` | Initial entity data. |
+| `entopts` | `object` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** `MoodEntryEntity` instance.
 
-#### `SleepLog(data?: object)`
+#### `SleepLog(entopts?: object)`
 
 Create a new `SleepLog` entity instance.
 
@@ -93,11 +100,11 @@ Create a new `SleepLog` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `data` | `object` | Initial entity data. |
+| `entopts` | `object` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** `SleepLogEntity` instance.
 
-#### `WorkoutLog(data?: object)`
+#### `WorkoutLog(entopts?: object)`
 
 Create a new `WorkoutLog` entity instance.
 
@@ -105,7 +112,7 @@ Create a new `WorkoutLog` entity instance.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `data` | `object` | Initial entity data. |
+| `entopts` | `object` | Entity options; use the entity's data() method to set initial data. |
 
 **Returns:** `WorkoutLogEntity` instance.
 
@@ -161,13 +168,19 @@ Alias for `TallySDK.test()`.
 const feed = client.Feed()
 ```
 
-### Fields
+### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food `input` is required
+by create and parse requests and is not a field on returned `FoodEntry` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
-| `date` | `string` | No |  |
-| `items` | `any[]` | No |  |
-| `relative_label` | `string` | No | "Today", "Yesterday", or the weekday name |
+| `date` | `string` | Operation-specific; see exact types |  |
+| `items` | `any[]` | Operation-specific; see exact types |  |
+| `relative_label` | `string` | Operation-specific; see exact types | "Today", "Yesterday", or the weekday name |
 
 ### Operations
 
@@ -213,23 +226,29 @@ Return a copy of the entity options.
 const food_entry = client.FoodEntry()
 ```
 
-### Fields
+### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food `input` is required
+by create and parse requests and is not a field on returned `FoodEntry` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
-| `caffeine_mg` | `number` | No |  |
-| `calories` | `number` | No |  |
-| `carbs_g` | `number` | No |  |
-| `confirmed` | `boolean` | No |  |
-| `date` | `string` | No | Date to log against (YYYY-MM-DD). |
-| `entry` | `Record<string, any>` | No |  |
-| `fat_g` | `number` | No |  |
-| `id` | `number` | No |  |
-| `input` | `string` | Yes | Natural-language food description, e.g. |
-| `logged_on` | `string` | No |  |
-| `meal_type` | `string` | No |  |
-| `name` | `string` | No |  |
-| `protein_g` | `number` | No |  |
+| `caffeine_mg` | `number` | Operation-specific; see exact types |  |
+| `calories` | `number` | Operation-specific; see exact types |  |
+| `carbs_g` | `number` | Operation-specific; see exact types |  |
+| `confirmed` | `boolean` | Operation-specific; see exact types |  |
+| `date` | `string` | Operation-specific; see exact types | Date to log against (YYYY-MM-DD). |
+| `entry` | `Record<string, any>` | Operation-specific; see exact types |  |
+| `fat_g` | `number` | Operation-specific; see exact types |  |
+| `id` | `number` | Operation-specific; see exact types |  |
+| `input` | `string` | Required in applicable request; see exact types | Natural-language food description, e.g. |
+| `logged_on` | `string` | Operation-specific; see exact types |  |
+| `meal_type` | `string` | Operation-specific; see exact types |  |
+| `name` | `string` | Operation-specific; see exact types |  |
+| `protein_g` | `number` | Operation-specific; see exact types |  |
 
 ### Actions
 
@@ -241,13 +260,14 @@ remaining keys are sent as that action's payload.
 | --- | --- | --- |
 | `parse` | `/food_entries/parse` | `client.FoodEntry().create({ $action: 'parse', ... })` |
 
-An action returns that action's OWN response, which is not necessarily a
-FoodEntry record — check the API definition for its shape.
+The legacy action resolves to an entity instance whose `.data()` contains
+that action's response envelope. For a typed preview response, use
+`client.api.parseFoodEntries({ input: 'eggs' })`.
 
 ```ts
 const result = await client.FoodEntry().create({
   $action: 'parse',
-  /* ...the action's own arguments */
+  input: '2 scrambled eggs',
 })
 ```
 
@@ -273,7 +293,7 @@ const results = await client.FoodEntry().list()
 
 #### `remove(match: object, ctrl?: object)`
 
-Remove the entity matching the given criteria.
+Remove the matching entity; return the entity instance with deleted() set to true.
 
 ```ts
 const result = await client.FoodEntry().remove({ id: 1 })
@@ -286,7 +306,7 @@ Update an existing entity. The data must include the entity `id`.
 ```ts
 const result = await client.FoodEntry().update({
   id: 1,
-  // Fields to update
+  entry: { name: 'Updated food name' },
 })
 ```
 
@@ -324,14 +344,20 @@ Return a copy of the entity options.
 const mood_entry = client.MoodEntry()
 ```
 
-### Fields
+### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food `input` is required
+by create and parse requests and is not a field on returned `FoodEntry` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
-| `body` | `string` | Yes |  |
-| `id` | `number` | No |  |
-| `logged_at` | `string` | No | ISO 8601 timestamp. |
-| `time_label` | `string` | No | Human-readable local time |
+| `body` | `string` | Required in applicable request; see exact types |  |
+| `id` | `number` | Operation-specific; see exact types |  |
+| `logged_at` | `string` | Operation-specific; see exact types | ISO 8601 timestamp. |
+| `time_label` | `string` | Operation-specific; see exact types | Human-readable local time |
 
 ### Field Usage by Operation
 
@@ -364,7 +390,7 @@ const results = await client.MoodEntry().list()
 
 #### `remove(match: object, ctrl?: object)`
 
-Remove the entity matching the given criteria.
+Remove the matching entity; return the entity instance with deleted() set to true.
 
 ```ts
 const result = await client.MoodEntry().remove({ id: 1 })
@@ -404,22 +430,28 @@ Return a copy of the entity options.
 const sleep_log = client.SleepLog()
 ```
 
-### Fields
+### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food `input` is required
+by create and parse requests and is not a field on returned `FoodEntry` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
-| `awake_seconds` | `number` | No |  |
-| `date` | `string` | No |  |
-| `deep_sleep_seconds` | `number` | No |  |
-| `duration_label` | `string` | No | Human-friendly duration, e.g. |
-| `ended_at` | `string` | No |  |
-| `id` | `number` | No |  |
-| `light_sleep_seconds` | `number` | No |  |
-| `rem_sleep_seconds` | `number` | No |  |
-| `sleep_score` | `number` | No |  |
-| `source` | `string` | No |  |
-| `started_at` | `string` | No |  |
-| `total_sleep_seconds` | `number` | No |  |
+| `awake_seconds` | `number` | Operation-specific; see exact types |  |
+| `date` | `string` | Operation-specific; see exact types |  |
+| `deep_sleep_seconds` | `number` | Operation-specific; see exact types |  |
+| `duration_label` | `string` | Operation-specific; see exact types | Human-friendly duration, e.g. |
+| `ended_at` | `string` | Operation-specific; see exact types |  |
+| `id` | `number` | Operation-specific; see exact types |  |
+| `light_sleep_seconds` | `number` | Operation-specific; see exact types |  |
+| `rem_sleep_seconds` | `number` | Operation-specific; see exact types |  |
+| `sleep_score` | `number` | Operation-specific; see exact types |  |
+| `source` | `string` | Operation-specific; see exact types |  |
+| `started_at` | `string` | Operation-specific; see exact types |  |
+| `total_sleep_seconds` | `number` | Operation-specific; see exact types |  |
 
 ### Operations
 
@@ -465,21 +497,27 @@ Return a copy of the entity options.
 const workout_log = client.WorkoutLog()
 ```
 
-### Fields
+### Legacy combined field inventory
 
-| Field | Type | Required | Description |
+This inferred inventory combines request and response fields; it is not an
+individual response schema. A required marker applies only to the relevant
+request operation, not every response. For example, food `input` is required
+by create and parse requests and is not a field on returned `FoodEntry` records.
+Use the [operation-specific types](https://github.com/angle-theory-studio/tally-sdk/blob/main/ts/src/TallyApiTypes.ts).
+
+| Field | Inferred type | Inferred request requirement | Description |
 | --- | --- | --- | --- |
-| `activity_type` | `string` | No |  |
-| `calories` | `number` | No |  |
-| `distance_m` | `number` | No | Distance in metres |
-| `distance_miles` | `number` | No | Distance in miles (rounded to 1 decimal) |
-| `duration_label` | `string` | No | Human-friendly duration, e.g. |
-| `id` | `number` | No |  |
-| `logged_on` | `string` | No |  |
-| `moving_time_s` | `number` | No | Moving time in seconds |
-| `name` | `string` | No |  |
-| `occurred_at` | `string` | No |  |
-| `source` | `string` | No |  |
+| `activity_type` | `string` | Operation-specific; see exact types |  |
+| `calories` | `number` | Operation-specific; see exact types |  |
+| `distance_m` | `number` | Operation-specific; see exact types | Distance in metres |
+| `distance_miles` | `number` | Operation-specific; see exact types | Distance in miles (rounded to 1 decimal) |
+| `duration_label` | `string` | Operation-specific; see exact types | Human-friendly duration, e.g. |
+| `id` | `number` | Operation-specific; see exact types |  |
+| `logged_on` | `string` | Operation-specific; see exact types |  |
+| `moving_time_s` | `number` | Operation-specific; see exact types | Moving time in seconds |
+| `name` | `string` | Operation-specific; see exact types |  |
+| `occurred_at` | `string` | Operation-specific; see exact types |  |
+| `source` | `string` | Operation-specific; see exact types |  |
 
 ### Operations
 

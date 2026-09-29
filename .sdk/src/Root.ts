@@ -30,6 +30,7 @@ import { PointUtil, Content } from 'jostraca'
 
 
 import { Top } from './Top'
+import { Readme as TallyReadme } from './cmp/ts/Readme_ts'
 import { BuildSDK } from './BuildSDK'
 import { rootPlan } from './RootPlan'
 
@@ -129,7 +130,8 @@ function targetPhases(target: any, entity: any, feature: any) {
   Main({ target })
 
   if (phaseActive('readme')) {
-    Readme({ target })
+    if (target.name === 'ts') TallyReadme({ target })
+    else Readme({ target })
   }
 
   // Per-target agent guides: <lang>/AGENTS.md + CLAUDE.md, and (driven

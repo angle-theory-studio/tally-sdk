@@ -1,5 +1,5 @@
 
-import { cmp, Content, installCommand, isPublished, repoInfo } from '@voxgig/sdkgen'
+import { cmp, Content, installCommand, isPublished } from '@voxgig/sdkgen'
 
 
 const ReadmeInstall = cmp(function ReadmeInstall(props: any) {
@@ -15,13 +15,19 @@ ${installCommand(model, target.name)}
     return
   }
 
-  // Publish pending: the package is not yet on npm, so install from the
-  // git release tag instead of a `npm install` that would 404.
-  const { releasesUrl } = repoInfo(model)
-  Content(`This package is not yet published to npm. Install it from the GitHub
-release tag (\`${target.name}/vX.Y.Z\`):
+  Content(`This package has no npm release or release tag. Build the committed
+source using [SUBMISSION.md](https://github.com/angle-theory-studio/tally-sdk/blob/main/SUBMISSION.md). From the repository root:
 
-- Releases: [${releasesUrl}](${releasesUrl})
+\`\`\`sh
+cd ts
+npm ci
+npm run build
+npm test
+\`\`\`
+
+The CommonJS entry point is \`ts/dist/TallySDK.js\`; declarations are in
+\`ts/dist/TallySDK.d.ts\`. The package name below describes the prepared package,
+not an already published npm release.
 
 `)
 })

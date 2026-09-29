@@ -15,14 +15,14 @@ import type {
 } from '../types'
 
 import type {
-  FoodEntry,
+  FoodEntryData,
   FoodEntryListMatch,
   FoodEntryCreateData,
   FoodEntryUpdateData,
   FoodEntryRemoveMatch,
 } from '../TallyTypes'
 
-class FoodEntryEntity extends TallyEntityBase<FoodEntry> {
+class FoodEntryEntity extends TallyEntityBase<FoodEntryData> {
 
   constructor(client: TallySDK, entopts: any) {
     super(client, entopts)

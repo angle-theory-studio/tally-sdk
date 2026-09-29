@@ -84,7 +84,7 @@ describe('FoodEntryEntity', async () => {
     ;(food_entry_ref01_data_up0 as any)[food_entry_ref01_markdef_up0.name] = food_entry_ref01_markdef_up0.value
 
     const food_entry_ref01_resdata_up0 = (await food_entry_ref01_ent.update(food_entry_ref01_data_up0)).data()
-    assert(food_entry_ref01_resdata_up0.id === food_entry_ref01_data_up0.id)
+    assert('id' in food_entry_ref01_resdata_up0 && food_entry_ref01_resdata_up0.id === food_entry_ref01_data_up0.id)
 
     assert((food_entry_ref01_resdata_up0 as any)[food_entry_ref01_markdef_up0.name] === food_entry_ref01_markdef_up0.value)
 

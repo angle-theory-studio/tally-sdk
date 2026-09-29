@@ -12,12 +12,14 @@ const Gitignore = cmp(async function Gitignore(_props: any) {
 node_modules/
 
 # Build output
-#
-# dist/ and dist-test/ are COMMITTED, not ignored: the compiled SDK and the
-# compiled test suite are part of the published repo, so a consumer can read
-# and run them straight from a clone without a build step. Only the
-# incremental-build bookkeeping is ignored.
+# This source submission builds compiled files from the committed inputs.
+# npm pack explicitly includes dist after the build; Git does not.
+dist/
+dist-test/
 *.tsbuildinfo
+
+# Temporary sources emitted while validating documentation examples.
+test/.examples_*.gen.ts
 
 # Coverage
 coverage/
