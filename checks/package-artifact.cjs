@@ -32,7 +32,9 @@ for (const file of files.keys()) {
 
 const isolated = fs.mkdtempSync(path.join(os.tmpdir(), 'tally-package-'))
 try {
-  execFileSync('tar', ['-xzf', tarball, '-C', isolated], { stdio: 'pipe' })
+  // Feed the verified bytes through stdin: GNU tar treats a Windows drive-letter
+  // archive path as a remote host. Node resolves the extraction cwd natively.
+  execFileSync('tar', ['-xzf', '-'], { cwd: isolated, input: bytes, stdio: 'pipe' })
   const installed = path.join(isolated, 'package')
   const manifest = JSON.parse(fs.readFileSync(path.join(installed, 'package.json'), 'utf8'))
   assert.equal(manifest.name, expected.name)
