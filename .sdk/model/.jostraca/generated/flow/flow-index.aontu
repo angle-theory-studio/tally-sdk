@@ -1,0 +1,7 @@
+# Flows
+
+@"./BasicFeedFlow.aontu"
+@"./BasicFoodEntryFlow.aontu"
+@"./BasicMoodEntryFlow.aontu"
+@"./BasicSleepLogFlow.aontu"
+@"./BasicWorkoutLogFlow.aontu"

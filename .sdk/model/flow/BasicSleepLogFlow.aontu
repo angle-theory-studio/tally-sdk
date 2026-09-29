@@ -1,0 +1,22 @@
+# BasicSleepLogFlow
+
+main: kit: flow: BasicSleepLogFlow:
+{
+  entity: "sleep_log",
+  kind: "basic",
+  name: "BasicSleepLogFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "sleep_log_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSleepLogFlow"
+}

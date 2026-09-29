@@ -1,0 +1,1477 @@
+{
+  "def": "openapi.yaml",
+  "main": {
+    "def": {
+      "desc": ""
+    },
+    "kit": {
+      "author": {
+        "name": "angle-theory-studio",
+        "url": "https://github.com/angle-theory-studio"
+      },
+      "config": {
+        "docs_order": [
+          "ts",
+          "py",
+          "php",
+          "go",
+          "rb",
+          "lua"
+        ],
+        "headers": {
+          "content-type": "application/json"
+        },
+        "repr": "auto"
+      },
+      "contributor": {},
+      "doc": {
+        "active": true,
+        "assets": {
+          "path": ".sdk/doc/assets"
+        },
+        "brand": {
+          "label": "",
+          "notice": "",
+          "shortNotice": "",
+          "url": ""
+        },
+        "ci": {
+          "active": true,
+          "branch": "main"
+        },
+        "content": {
+          "path": ".sdk/doc/content"
+        },
+        "edition": {
+          "github-pages": {
+            "active": false,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "github-pages",
+            "name": "github-pages",
+            "origname": "",
+            "output": {
+              "path": "docs"
+            },
+            "package": "@voxgig/docgen",
+            "published": false,
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          },
+          "summary": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "summary",
+            "name": "summary",
+            "origname": "",
+            "output": {
+              "path": "SUMMARY.md"
+            },
+            "package": "@voxgig/docgen",
+            "published": false,
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          }
+        },
+        "qa": {
+          "vocabulary": []
+        },
+        "style": {
+          "color": {
+            "accent": "#00c6d8",
+            "background": "#f5f5f9",
+            "darkBackground": "#0f1117",
+            "darkText": "#e6edf3",
+            "primary": "#e70042",
+            "text": "#0a0a0a"
+          },
+          "font": "Nunito, system-ui, sans-serif",
+          "fontFile": "",
+          "headingFont": "Nunito, system-ui, sans-serif",
+          "headingFontFile": "",
+          "logo": "",
+          "mode": "light",
+          "mono": "ui-monospace, monospace",
+          "monoFile": ""
+        },
+        "target": {}
+      },
+      "entity": {
+        "feed": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "date": {
+              "a": true,
+              "fo": "date",
+              "h": "Date",
+              "n": "date",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "items": {
+              "a": true,
+              "h": "Items",
+              "n": "items",
+              "r": false,
+              "t": "`$ARRAY`"
+            },
+            "relative_label": {
+              "a": true,
+              "h": "Relative Label",
+              "n": "relative_label",
+              "r": false,
+              "sh": "\"Today\", \"Yesterday\", or the weekday name",
+              "t": "`$STRING`"
+            }
+          },
+          "name": "feed",
+          "op": {
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /feed",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "2026-06-03",
+                        "k": "query",
+                        "n": "before",
+                        "or": "before",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/feed",
+                  "q": {
+                    "exist": [
+                      "before"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "feed"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.days`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "food_entry": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "caffeine_mg": {
+              "a": true,
+              "h": "Caffeine Mg",
+              "n": "caffeine_mg",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "calories": {
+              "a": true,
+              "h": "Calories",
+              "n": "calories",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "carbs_g": {
+              "a": true,
+              "h": "Carbs G",
+              "n": "carbs_g",
+              "r": false,
+              "t": "`$NUMBER`"
+            },
+            "confirmed": {
+              "a": true,
+              "h": "Confirmed",
+              "n": "confirmed",
+              "r": false,
+              "t": "`$BOOLEAN`"
+            },
+            "date": {
+              "a": true,
+              "fo": "date",
+              "h": "Date",
+              "n": "date",
+              "r": false,
+              "sh": "Date to log against (YYYY-MM-DD).",
+              "t": "`$STRING`"
+            },
+            "entry": {
+              "a": true,
+              "h": "Entry",
+              "n": "entry",
+              "r": false,
+              "t": "`$OBJECT`"
+            },
+            "fat_g": {
+              "a": true,
+              "h": "Fat G",
+              "n": "fat_g",
+              "r": false,
+              "t": "`$NUMBER`"
+            },
+            "id": {
+              "a": true,
+              "h": "Id",
+              "n": "id",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "input": {
+              "a": true,
+              "h": "Input",
+              "n": "input",
+              "r": true,
+              "sh": "Natural-language food description, e.g.",
+              "t": "`$STRING`"
+            },
+            "logged_on": {
+              "a": true,
+              "fo": "date",
+              "h": "Logged On",
+              "n": "logged_on",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "meal_type": {
+              "a": true,
+              "h": "Meal Type",
+              "n": "meal_type",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "name": {
+              "a": true,
+              "h": "Name",
+              "n": "name",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "protein_g": {
+              "a": true,
+              "h": "Protein G",
+              "n": "protein_g",
+              "r": false,
+              "t": "`$NUMBER`"
+            }
+          },
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "food_entry",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "POST /food_entries",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/food_entries",
+                  "q": {},
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "food_entries"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                },
+                {
+                  "a": true,
+                  "co": {
+                    "id": "POST /food_entries/parse",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/food_entries/parse",
+                  "q": {
+                    "$action": "parse"
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "food_entries"
+                    },
+                    {
+                      "lit": "parse"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /food_entries",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "2026-06-03",
+                        "k": "query",
+                        "n": "date",
+                        "or": "date",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/food_entries",
+                  "q": {
+                    "exist": [
+                      "date"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "food_entries"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.entries`"
+                  }
+                }
+              ]
+            },
+            "remove": {
+              "input": "data",
+              "name": "remove",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "DELETE /food_entries/{id}",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "DELETE",
+                  "o": "/food_entries/{id}",
+                  "q": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "food_entries"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "update": {
+              "input": "data",
+              "name": "update",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "PATCH /food_entries/{id}",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "PATCH",
+                  "o": "/food_entries/{id}",
+                  "q": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "food_entries"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "mood_entry": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "body": {
+              "a": true,
+              "h": "Body",
+              "n": "body",
+              "op": {
+                "list": {
+                  "req": false,
+                  "type": "`$STRING`"
+                }
+              },
+              "r": true,
+              "t": "`$STRING`"
+            },
+            "id": {
+              "a": true,
+              "h": "Id",
+              "n": "id",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "logged_at": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Logged At",
+              "n": "logged_at",
+              "r": false,
+              "sh": "ISO 8601 timestamp.",
+              "t": "`$STRING`"
+            },
+            "time_label": {
+              "a": true,
+              "h": "Time Label",
+              "n": "time_label",
+              "r": false,
+              "sh": "Human-readable local time",
+              "t": "`$STRING`"
+            }
+          },
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "mood_entry",
+          "op": {
+            "create": {
+              "input": "data",
+              "name": "create",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "POST /mood_entries",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/mood_entries",
+                  "q": {},
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "mood_entries"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            },
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /mood_entries",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "2026-06-03",
+                        "k": "query",
+                        "n": "date",
+                        "or": "date",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/mood_entries",
+                  "q": {
+                    "exist": [
+                      "date"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "mood_entries"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.entries`"
+                  }
+                }
+              ]
+            },
+            "remove": {
+              "input": "data",
+              "name": "remove",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "DELETE /mood_entries/{id}",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "params": [
+                      {
+                        "a": true,
+                        "k": "param",
+                        "n": "id",
+                        "or": "id",
+                        "r": true,
+                        "t": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "DELETE",
+                  "o": "/mood_entries/{id}",
+                  "q": {
+                    "exist": [
+                      "id"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "mood_entries"
+                    },
+                    {
+                      "var": "id"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "sleep_log": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "awake_seconds": {
+              "a": true,
+              "h": "Awake Seconds",
+              "n": "awake_seconds",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "date": {
+              "a": true,
+              "fo": "date",
+              "h": "Date",
+              "n": "date",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "deep_sleep_seconds": {
+              "a": true,
+              "h": "Deep Sleep Seconds",
+              "n": "deep_sleep_seconds",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "duration_label": {
+              "a": true,
+              "h": "Duration Label",
+              "n": "duration_label",
+              "r": false,
+              "sh": "Human-friendly duration, e.g.",
+              "t": "`$STRING`"
+            },
+            "ended_at": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Ended At",
+              "n": "ended_at",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "id": {
+              "a": true,
+              "h": "Id",
+              "n": "id",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "light_sleep_seconds": {
+              "a": true,
+              "h": "Light Sleep Seconds",
+              "n": "light_sleep_seconds",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "rem_sleep_seconds": {
+              "a": true,
+              "h": "Rem Sleep Seconds",
+              "n": "rem_sleep_seconds",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "sleep_score": {
+              "a": true,
+              "h": "Sleep Score",
+              "n": "sleep_score",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "source": {
+              "a": true,
+              "h": "Source",
+              "n": "source",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "started_at": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Started At",
+              "n": "started_at",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "total_sleep_seconds": {
+              "a": true,
+              "h": "Total Sleep Seconds",
+              "n": "total_sleep_seconds",
+              "r": false,
+              "t": "`$INTEGER`"
+            }
+          },
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "sleep_log",
+          "op": {
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /sleep_logs",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "2026-06-03",
+                        "k": "query",
+                        "n": "date",
+                        "or": "date",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/sleep_logs",
+                  "q": {
+                    "exist": [
+                      "date"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "sleep_logs"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.sleep_logs`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "workout_log": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": {
+            "activity_type": {
+              "a": true,
+              "h": "Activity Type",
+              "n": "activity_type",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "calories": {
+              "a": true,
+              "h": "Calories",
+              "n": "calories",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "distance_m": {
+              "a": true,
+              "h": "Distance M",
+              "n": "distance_m",
+              "r": false,
+              "sh": "Distance in metres",
+              "t": "`$INTEGER`"
+            },
+            "distance_miles": {
+              "a": true,
+              "h": "Distance Miles",
+              "n": "distance_miles",
+              "r": false,
+              "sh": "Distance in miles (rounded to 1 decimal)",
+              "t": "`$NUMBER`"
+            },
+            "duration_label": {
+              "a": true,
+              "h": "Duration Label",
+              "n": "duration_label",
+              "r": false,
+              "sh": "Human-friendly duration, e.g.",
+              "t": "`$STRING`"
+            },
+            "id": {
+              "a": true,
+              "h": "Id",
+              "n": "id",
+              "r": false,
+              "t": "`$INTEGER`"
+            },
+            "logged_on": {
+              "a": true,
+              "fo": "date",
+              "h": "Logged On",
+              "n": "logged_on",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "moving_time_s": {
+              "a": true,
+              "h": "Moving Time S",
+              "n": "moving_time_s",
+              "r": false,
+              "sh": "Moving time in seconds",
+              "t": "`$INTEGER`"
+            },
+            "name": {
+              "a": true,
+              "h": "Name",
+              "n": "name",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "occurred_at": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Occurred At",
+              "n": "occurred_at",
+              "r": false,
+              "t": "`$STRING`"
+            },
+            "source": {
+              "a": true,
+              "h": "Source",
+              "n": "source",
+              "r": false,
+              "t": "`$STRING`"
+            }
+          },
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "workout_log",
+          "op": {
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /workout_logs",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "2026-06-03",
+                        "k": "query",
+                        "n": "date",
+                        "or": "date",
+                        "r": false,
+                        "t": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/workout_logs",
+                  "q": {
+                    "exist": [
+                      "date"
+                    ]
+                  },
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "workout_logs"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body.workouts`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        }
+      },
+      "feature": {
+        "test": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false
+            },
+            "optspec": {
+              "entity": "`$MAP`",
+              "net": "`$MAP`"
+            },
+            "strict": false
+          },
+          "description": "In-memory mock transport for testing without a live server",
+          "hook": {
+            "GetData": {
+              "active": true,
+              "await": false
+            },
+            "GetMatch": {
+              "active": true,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": true,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": true,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": true,
+              "await": false
+            },
+            "PreResult": {
+              "active": true,
+              "await": false
+            },
+            "PreSpec": {
+              "active": true,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": true,
+              "await": false
+            },
+            "SetMatch": {
+              "active": true,
+              "await": false
+            }
+          },
+          "name": "test",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Test transport",
+          "transport": "base",
+          "version": "0.0.1"
+        }
+      },
+      "flow": {
+        "BasicFeedFlow": {
+          "active": true,
+          "entity": "feed",
+          "key$": "BasicFeedFlow",
+          "kind": "basic",
+          "name": "BasicFeedFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "feed_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicFoodEntryFlow": {
+          "active": true,
+          "entity": "food_entry",
+          "key$": "BasicFoodEntryFlow",
+          "kind": "basic",
+          "name": "BasicFoodEntryFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "food_entry_ref01"
+              },
+              "m": {},
+              "o": "create",
+              "s": [],
+              "v": []
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "food_entry_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "food_entry_ref01",
+                "srcdatavar": "food_entry_ref01_data",
+                "suffix": "_up0",
+                "textfield": "date"
+              },
+              "m": {},
+              "o": "update",
+              "s": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-food_entry_ref01"
+                  }
+                }
+              ],
+              "v": []
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "food_entry_ref01",
+                "suffix": "_rm0"
+              },
+              "m": {
+                "id": "food_entry01"
+              },
+              "o": "remove",
+              "s": [],
+              "v": []
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "suffix": "_rt0"
+              },
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemNotExists",
+                  "def": {
+                    "ref": "food_entry_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicMoodEntryFlow": {
+          "active": true,
+          "entity": "mood_entry",
+          "key$": "BasicMoodEntryFlow",
+          "kind": "basic",
+          "name": "BasicMoodEntryFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "mood_entry_ref01"
+              },
+              "m": {},
+              "o": "create",
+              "s": [],
+              "v": []
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "mood_entry_ref01"
+                  }
+                }
+              ]
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "ref": "mood_entry_ref01",
+                "suffix": "_rm0"
+              },
+              "m": {
+                "id": "mood_entry01"
+              },
+              "o": "remove",
+              "s": [],
+              "v": []
+            },
+            {
+              "a": true,
+              "d": {},
+              "i": {
+                "suffix": "_rt0"
+              },
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemNotExists",
+                  "def": {
+                    "ref": "mood_entry_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicSleepLogFlow": {
+          "active": true,
+          "entity": "sleep_log",
+          "key$": "BasicSleepLogFlow",
+          "kind": "basic",
+          "name": "BasicSleepLogFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "sleep_log_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicWorkoutLogFlow": {
+          "active": true,
+          "entity": "workout_log",
+          "key$": "BasicWorkoutLogFlow",
+          "kind": "basic",
+          "name": "BasicWorkoutLogFlow",
+          "param": {},
+          "step": [
+            {
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "workout_log_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "info": {
+        "description": "Tally is a personal nutrition and weight tracker. Log food in plain English,\ntrack your weight, and hit your macro goals.\n\n**Base URL:** https://www.logwithtally.com/api/v1\n\n## Authentication\n\nAll endpoints require a Bearer token in the `Authorization` header:\n\n```\nAuthorization: Bearer <api_token>\n```\n\nFind your API token in Tally under Settings.\n",
+        "security": {
+          "in": "header",
+          "name": "Authorization",
+          "prefix": "Bearer",
+          "scheme": "BearerToken",
+          "type": "http"
+        },
+        "servers": [
+          {
+            "url": "https://www.logwithtally.com/api/v1"
+          }
+        ],
+        "summary": "Tally is a personal nutrition and weight tracker.",
+        "title": "Tally API",
+        "version": "1",
+        "website": "https://logwithtally.com"
+      },
+      "option": {},
+      "optspec": {
+        "allow": {
+          "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
+          "op": "create,update,load,list,remove,command,direct,graphql"
+        },
+        "apikey": "",
+        "auth": {
+          "basic": false,
+          "in": "",
+          "name": "",
+          "prefix": ""
+        },
+        "base": "http://localhost:8000",
+        "clean": {
+          "keys": "key,token,id"
+        },
+        "entity": {
+          "`$CHILD`": {
+            "`$OPEN`": true,
+            "active": false,
+            "alias": {}
+          }
+        },
+        "extend": "`$ANY`",
+        "headers": {
+          "`$CHILD`": "`$STRING`"
+        },
+        "prefix": "",
+        "secret": "",
+        "server": {
+          "`$CHILD`": ""
+        },
+        "suffix": "",
+        "system": {
+          "fetch": "`$ANY`"
+        },
+        "test": {
+          "active": false,
+          "entity": {
+            "`$OPEN`": true
+          }
+        },
+        "utility": {}
+      },
+      "phase": {
+        "build": {
+          "active": true
+        },
+        "top": {
+          "active": true
+        }
+      },
+      "repo": {
+        "host": "github.com",
+        "path": "angle-theory-studio/tally-sdk"
+      },
+      "target": {
+        "ts": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {
+            "@types/node": {
+              "active": true,
+              "kind": "dev",
+              "version": "^25.6.0"
+            },
+            "typescript": {
+              "active": true,
+              "kind": "dev",
+              "version": "^5.9.3"
+            }
+          },
+          "ext": "ts",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "tally",
+            "package": "",
+            "path": ""
+          },
+          "name": "ts",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "root": false,
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "npm",
+              "package": "@angle-theory-studio/tally-sdk",
+              "state": "pending",
+              "url": "https://registry.npmjs.org",
+              "vault": {
+                "alias": "npm",
+                "env": "",
+                "recipe": "npm"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [
+            "test/runner.ts",
+            "test/vendor/omni/compat.ts",
+            "src/feature/secrets/sekreto/Providers.ts",
+            "src/feature/secrets/sekreto/Sigv4.ts",
+            "src/feature/secrets/sekreto/provider/Registry.ts",
+            "src/feature/secrets/sekreto/provider/http.ts"
+          ],
+          "title": "TypeScript"
+        }
+      },
+      "test": {
+        "live": {
+          "app": false,
+          "base": "",
+          "strict": true
+        }
+      }
+    }
+  },
+  "name": "tally",
+  "origin": "voxgig-sdk"
+}

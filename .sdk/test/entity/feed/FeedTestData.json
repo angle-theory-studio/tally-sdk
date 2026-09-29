@@ -1,0 +1,37 @@
+{
+  "existing": {
+    "feed": {
+      "FEED00": {
+        "date": "s1e",
+        "items": [],
+        "relative_label": "s20"
+      },
+      "FEED01": {
+        "date": "s3c",
+        "items": [],
+        "relative_label": "s3e"
+      },
+      "FEED02": {
+        "date": "s5a",
+        "items": [],
+        "relative_label": "s5c"
+      }
+    }
+  },
+  "new": {
+    "feed": {
+      "feed_ref01": {
+        "date": "s78",
+        "items": [],
+        "relative_label": "s7a"
+      }
+    }
+  },
+  "requests": {
+    "GET /feed": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

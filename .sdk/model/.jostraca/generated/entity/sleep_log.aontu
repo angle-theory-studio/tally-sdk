@@ -1,0 +1,137 @@
+# Entity: sleep_log
+
+main: kit: entity: sleep_log: {
+
+  alias: field: {}
+
+  fields: {
+    awake_seconds: {
+      h: "Awake Seconds"
+      n: "awake_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+    date: {
+      fo: "date"
+      h: "Date"
+      n: "date"
+      r: false
+      t: "`$STRING`"
+    }
+    deep_sleep_seconds: {
+      h: "Deep Sleep Seconds"
+      n: "deep_sleep_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+    duration_label: {
+      h: "Duration Label"
+      n: "duration_label"
+      r: false
+      sh: "Human-friendly duration, e.g."
+      t: "`$STRING`"
+    }
+    ended_at: {
+      fo: "date-time"
+      h: "Ended At"
+      n: "ended_at"
+      r: false
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$INTEGER`"
+    }
+    light_sleep_seconds: {
+      h: "Light Sleep Seconds"
+      n: "light_sleep_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+    rem_sleep_seconds: {
+      h: "Rem Sleep Seconds"
+      n: "rem_sleep_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+    sleep_score: {
+      h: "Sleep Score"
+      n: "sleep_score"
+      r: false
+      t: "`$INTEGER`"
+    }
+    source: {
+      h: "Source"
+      n: "source"
+      r: false
+      t: "`$STRING`"
+    }
+    started_at: {
+      fo: "date-time"
+      h: "Started At"
+      n: "started_at"
+      r: false
+      t: "`$STRING`"
+    }
+    total_sleep_seconds: {
+      h: "Total Sleep Seconds"
+      n: "total_sleep_seconds"
+      r: false
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "sleep_log"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /sleep_logs"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-03"
+                k: "query"
+                n: "date"
+                or: "date"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/sleep_logs"
+          q: {
+            exist: [
+              "date"
+            ]
+          }
+          s: [
+            {
+              lit: "sleep_logs"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.sleep_logs`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

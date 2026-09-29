@@ -1,0 +1,50 @@
+{
+  "existing": {
+    "mood_entry": {
+      "MOOD_ENTRY00": {
+        "body": "s28",
+        "id": "MOOD_ENTRY00",
+        "logged_at": "s2a",
+        "time_label": "s2b"
+      },
+      "MOOD_ENTRY01": {
+        "body": "s50",
+        "id": "MOOD_ENTRY01",
+        "logged_at": "s52",
+        "time_label": "s53"
+      },
+      "MOOD_ENTRY02": {
+        "body": "s78",
+        "id": "MOOD_ENTRY02",
+        "logged_at": "s7a",
+        "time_label": "s7b"
+      }
+    }
+  },
+  "new": {
+    "mood_entry": {
+      "mood_entry_ref01": {
+        "body": "sa0",
+        "logged_at": "sa2",
+        "time_label": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "POST /mood_entries": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /mood_entries": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /mood_entries/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

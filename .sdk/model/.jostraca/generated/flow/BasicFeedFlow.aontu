@@ -1,0 +1,22 @@
+# BasicFeedFlow
+
+main: kit: flow: BasicFeedFlow:
+{
+  entity: "feed",
+  kind: "basic",
+  name: "BasicFeedFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "feed_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFeedFlow"
+}

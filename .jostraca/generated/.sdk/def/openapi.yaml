@@ -1,0 +1,817 @@
+openapi: 3.1.0
+info:
+  title: Tally API
+  version: "1"
+  description: |
+    Tally is a personal nutrition and weight tracker. Log food in plain English,
+    track your weight, and hit your macro goals.
+
+    **Base URL:** https://www.logwithtally.com/api/v1
+
+    ## Authentication
+
+    All endpoints require a Bearer token in the `Authorization` header:
+
+    ```
+    Authorization: Bearer <api_token>
+    ```
+
+    Find your API token in Tally under Settings.
+
+servers:
+  - url: https://www.logwithtally.com/api/v1
+
+tags:
+  - name: Food Entries
+    description: Log, preview, update, and delete food entries
+  - name: Mood Entries
+    description: Log and delete mood/journal entries
+  - name: Workout Logs
+    description: Read workout logs synced from Strava
+  - name: Sleep Logs
+    description: Sleep sessions for a date (Withings-synced and manually logged)
+  - name: Feed
+    description: Unified reverse-chronological activity feed
+
+paths:
+
+  # ----------------------------------------
+  # Food Entries
+  # ----------------------------------------
+
+  /food_entries:
+    get:
+      tags: [Food Entries]
+      summary: List food entries for a date
+      security:
+        - BearerToken: []
+      parameters:
+        - name: date
+          in: query
+          description: "Date to fetch entries for (YYYY-MM-DD). Defaults to today in the user's timezone."
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-06-03"
+      responses:
+        "200":
+          description: Entries, daily totals, remaining macros, and goals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FoodEntriesResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    post:
+      tags: [Food Entries]
+      summary: Parse natural-language input and save food entries
+      description: |
+        Parses the `input` string using the NLP nutrition service, saves all
+        recognised food items as entries, and also saves them as presets for
+        quick re-logging.
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FoodEntryCreateBody"
+      responses:
+        "201":
+          description: Entries created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/FoodEntry"
+                  totals:
+                    $ref: "#/components/schemas/DailyTotals"
+                  remaining:
+                    $ref: "#/components/schemas/DailyRemaining"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /food_entries/parse:
+    post:
+      tags: [Food Entries]
+      summary: Preview NLP parse without saving
+      description: |
+        Runs the same NLP pipeline as `POST /food_entries` but does **not**
+        persist anything. Use this to show users a preview before they confirm.
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [input]
+              properties:
+                input:
+                  type: string
+                  example: "2 scrambled eggs and a slice of toast"
+                meal_type:
+                  $ref: "#/components/schemas/MealType"
+      responses:
+        "200":
+          description: Parse preview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  raw_input:
+                    type: string
+                  meal_type:
+                    $ref: "#/components/schemas/MealType"
+                  parsed:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ParsedEntry"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /food_entries/{id}:
+    patch:
+      tags: [Food Entries]
+      summary: Update a food entry
+      security:
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entry:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    calories:
+                      type: integer
+                    protein_g:
+                      type: number
+                    carbs_g:
+                      type: number
+                    fat_g:
+                      type: number
+                    caffeine_mg:
+                      type: integer
+                    meal_type:
+                      $ref: "#/components/schemas/MealType"
+      responses:
+        "200":
+          description: Updated entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FoodEntry"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+    delete:
+      tags: [Food Entries]
+      summary: Delete a food entry
+      security:
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Entry removed; updated totals returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry removed"
+                  totals:
+                    $ref: "#/components/schemas/DailyTotals"
+                  remaining:
+                    $ref: "#/components/schemas/DailyRemaining"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ----------------------------------------
+  # Mood Entries
+  # ----------------------------------------
+
+  /mood_entries:
+    get:
+      tags: [Mood Entries]
+      summary: List mood entries for a date
+      security:
+        - BearerToken: []
+      parameters:
+        - name: date
+          in: query
+          description: "Date to fetch entries for (YYYY-MM-DD). Defaults to today."
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-06-03"
+      responses:
+        "200":
+          description: Mood entries for the day
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MoodEntry"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    post:
+      tags: [Mood Entries]
+      summary: Create a mood/journal entry
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [body]
+              properties:
+                body:
+                  type: string
+                  example: "Feeling really focused today."
+                logged_at:
+                  type: string
+                  format: date-time
+                  description: "ISO 8601 timestamp. Defaults to now."
+                  example: "2026-06-03T09:30:00"
+      responses:
+        "201":
+          description: Entry created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoodEntry"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /mood_entries/{id}:
+    delete:
+      tags: [Mood Entries]
+      summary: Delete a mood entry
+      security:
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Entry removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entry removed"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ----------------------------------------
+  # Workout Logs
+  # ----------------------------------------
+
+  /workout_logs:
+    get:
+      tags: [Workout Logs]
+      summary: List workout logs for a date
+      security:
+        - BearerToken: []
+      parameters:
+        - name: date
+          in: query
+          description: "Date to fetch workouts for (YYYY-MM-DD). Defaults to today in the user's timezone."
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-06-03"
+      responses:
+        "200":
+          description: Workouts for the day
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                    example: "2026-06-03"
+                  workouts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/WorkoutLog"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ----------------------------------------
+  # Sleep Logs
+  # ----------------------------------------
+
+  /sleep_logs:
+    get:
+      tags: [Sleep Logs]
+      summary: List sleep sessions for a date
+      description: "Returns all sleep sessions for the given date (night sleep and naps), ordered longest first. Includes both Withings-synced and manually logged entries."
+      security:
+        - BearerToken: []
+      parameters:
+        - name: date
+          in: query
+          description: "Date to fetch sleep for (YYYY-MM-DD). Defaults to today in the user's timezone."
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-06-03"
+      responses:
+        "200":
+          description: Sleep logs for the day
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                    example: "2026-06-03"
+                  sleep_logs:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SleepLog"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ----------------------------------------
+  # Feed
+  # ----------------------------------------
+
+  /feed:
+    get:
+      tags: [Feed]
+      summary: Unified activity feed (14 days per page)
+      description: |
+        Returns the last 14 days of activity grouped by date, newest day first.
+        Each day contains an array of typed `items` (food, mood, weight, workout)
+        sorted newest-first within the day.
+
+        Paginate backwards by passing the `older_before` value from the previous
+        response as the `before` query parameter.
+      security:
+        - BearerToken: []
+      parameters:
+        - name: before
+          in: query
+          description: "Fetch the 14 days ending on (and including) this date. Defaults to today."
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-06-03"
+      responses:
+        "200":
+          description: Feed days
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeedResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+# ----------------------------------------
+# Components
+# ----------------------------------------
+
+components:
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      description: "API token from Tally Settings"
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Resource ID
+
+  responses:
+    Unauthorized:
+      description: Authentication required or token invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Authentication required"
+
+    UnprocessableEntity:
+      description: Validation or parse error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: string
+
+  schemas:
+
+    MealType:
+      type: string
+      enum: [breakfast, lunch, dinner, snack]
+      example: lunch
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          nullable: true
+        time_zone:
+          type: string
+          example: "Eastern Time (US & Canada)"
+        goal_calories:
+          type: integer
+          nullable: true
+        goal_protein_g:
+          type: number
+          nullable: true
+        goal_carbs_g:
+          type: number
+          nullable: true
+        goal_fat_g:
+          type: number
+          nullable: true
+
+    FoodEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: "Scrambled eggs (2)"
+        meal_type:
+          $ref: "#/components/schemas/MealType"
+        logged_on:
+          type: string
+          format: date
+          example: "2026-06-03"
+        calories:
+          type: integer
+          example: 180
+        protein_g:
+          type: number
+          example: 12.0
+        carbs_g:
+          type: number
+          example: 2.0
+        fat_g:
+          type: number
+          example: 13.0
+        caffeine_mg:
+          type: integer
+          example: 0
+        confirmed:
+          type: boolean
+
+    ParsedEntry:
+      type: object
+      description: NLP preview entry (not yet persisted)
+      properties:
+        name:
+          type: string
+        calories:
+          type: integer
+        protein_g:
+          type: number
+        carbs_g:
+          type: number
+        fat_g:
+          type: number
+        caffeine_mg:
+          type: integer
+
+    FoodEntryCreateBody:
+      type: object
+      required: [input]
+      properties:
+        input:
+          type: string
+          description: "Natural-language food description, e.g. \"chicken and rice\""
+          example: "grilled chicken breast with brown rice and broccoli"
+        meal_type:
+          $ref: "#/components/schemas/MealType"
+        date:
+          type: string
+          format: date
+          description: "Date to log against (YYYY-MM-DD). Defaults to today."
+          example: "2026-06-03"
+
+    DailyTotals:
+      type: object
+      properties:
+        calories:
+          type: integer
+        protein_g:
+          type: number
+        carbs_g:
+          type: number
+        fat_g:
+          type: number
+        caffeine_mg:
+          type: integer
+        entry_count:
+          type: integer
+
+    DailyRemaining:
+      type: object
+      description: Goal minus consumed for each macro (can be negative)
+      properties:
+        calories:
+          type: integer
+        protein_g:
+          type: number
+        carbs_g:
+          type: number
+        fat_g:
+          type: number
+
+    DailyGoals:
+      type: object
+      nullable: true
+      properties:
+        calories:
+          type: integer
+        protein_g:
+          type: number
+        carbs_g:
+          type: number
+        fat_g:
+          type: number
+
+    FoodEntriesResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/FoodEntry"
+        totals:
+          $ref: "#/components/schemas/DailyTotals"
+        remaining:
+          $ref: "#/components/schemas/DailyRemaining"
+        goals:
+          $ref: "#/components/schemas/DailyGoals"
+
+    MoodEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+          example: "Feeling really focused today."
+        logged_at:
+          type: string
+          format: date-time
+          example: "2026-06-03T09:30:00.000Z"
+        time_label:
+          type: string
+          description: Human-readable local time
+          example: "9:30 AM"
+
+    FeedItem:
+      type: object
+      description: |
+        A single activity item within a feed day. The `type` field discriminates
+        which additional fields are present.
+      required: [type, id, time_label]
+      properties:
+        type:
+          type: string
+          enum: [food, mood, weight, workout]
+        id:
+          type: integer
+        time_label:
+          type: string
+          example: "12:30 PM"
+        # food fields
+        meal_type:
+          $ref: "#/components/schemas/MealType"
+        name:
+          type: string
+          description: "food or workout name"
+        calories:
+          type: integer
+          description: "food or workout calories"
+        protein_g:
+          type: number
+        carbs_g:
+          type: number
+        fat_g:
+          type: number
+        # mood fields
+        body:
+          type: string
+          description: "mood entry text"
+        # weight fields
+        weight_lbs:
+          type: number
+          example: 174.2
+        # workout fields
+        distance_m:
+          type: number
+          nullable: true
+          description: "metres covered"
+        moving_time_s:
+          type: integer
+          nullable: true
+          description: "moving time in seconds"
+        source:
+          type: string
+          nullable: true
+          description: "workout source, e.g. Strava"
+
+    FeedDay:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2026-06-03"
+        relative_label:
+          type: string
+          description: "\"Today\", \"Yesterday\", or the weekday name"
+          example: "Today"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeedItem"
+
+    WorkoutLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: "Morning Run"
+        activity_type:
+          type: string
+          example: "Run"
+        source:
+          type: string
+          example: "strava"
+        calories:
+          type: integer
+          nullable: true
+          example: 450
+        distance_m:
+          type: integer
+          nullable: true
+          description: Distance in metres
+          example: 8000
+        distance_miles:
+          type: number
+          nullable: true
+          description: Distance in miles (rounded to 1 decimal)
+          example: 4.9
+        moving_time_s:
+          type: integer
+          nullable: true
+          description: Moving time in seconds
+          example: 2640
+        duration_label:
+          type: string
+          nullable: true
+          description: Human-friendly duration, e.g. "44m" or "1h 4m"
+          example: "44m"
+        occurred_at:
+          type: string
+          format: date-time
+          example: "2026-03-05T07:00:00Z"
+        logged_on:
+          type: string
+          format: date
+          example: "2026-03-05"
+
+    SleepLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+          example: "2026-03-10"
+        source:
+          type: string
+          example: "withings"
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-03-09T23:00:00Z"
+        ended_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-03-10T07:00:00Z"
+        total_sleep_seconds:
+          type: integer
+          nullable: true
+          example: 25200
+        deep_sleep_seconds:
+          type: integer
+          nullable: true
+          example: 5400
+        light_sleep_seconds:
+          type: integer
+          nullable: true
+          example: 15000
+        rem_sleep_seconds:
+          type: integer
+          nullable: true
+          example: 4800
+        awake_seconds:
+          type: integer
+          nullable: true
+          example: 900
+        sleep_score:
+          type: integer
+          nullable: true
+          example: 78
+        duration_label:
+          type: string
+          nullable: true
+          description: Human-friendly duration, e.g. "7h 0m"
+          example: "7h 0m"
+
+    FeedResponse:
+      type: object
+      properties:
+        days:
+          type: array
+          description: Days with at least one item, newest first
+          items:
+            $ref: "#/components/schemas/FeedDay"
+        older_before:
+          type: string
+          format: date
+          description: "Pass this as ?before= to fetch the previous page"
+          example: "2026-05-20"

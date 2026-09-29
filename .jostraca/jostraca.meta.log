@@ -1,0 +1,140 @@
+{
+  "foldername": ".jostraca",
+  "filename": "jostraca.meta.log",
+  "last": 1790693554592,
+  "hlast": 2026092914523459,
+  "files": {
+    ".github/workflows/docgen.yml": {
+      "action": "write",
+      "path": ".github/workflows/docgen.yml",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554589,
+      "hwhen": 2026092914523458
+    },
+    ".sdk/doc/generated.json": {
+      "action": "write",
+      "path": ".sdk/doc/generated.json",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554590,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa-manifest.json": {
+      "action": "write",
+      "path": ".sdk/doc/qa-manifest.json",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554590,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/pages-job.yml": {
+      "action": "write",
+      "path": ".sdk/doc/qa/pages-job.yml",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554590,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/STYLE-GUIDE.md": {
+      "action": "write",
+      "path": ".sdk/doc/qa/STYLE-GUIDE.md",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554590,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/styles/config/vocabularies/Docgen/accept.txt": {
+      "action": "write",
+      "path": ".sdk/doc/qa/styles/config/vocabularies/Docgen/accept.txt",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554590,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/styles/config/vocabularies/Docgen/reject.txt": {
+      "action": "write",
+      "path": ".sdk/doc/qa/styles/config/vocabularies/Docgen/reject.txt",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554591,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/styles/Docgen/WordChoice.yml": {
+      "action": "write",
+      "path": ".sdk/doc/qa/styles/Docgen/WordChoice.yml",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554591,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/vale.ini": {
+      "action": "write",
+      "path": ".sdk/doc/qa/vale.ini",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554591,
+      "hwhen": 2026092914523459
+    },
+    ".sdk/doc/qa/workflow.yml": {
+      "action": "write",
+      "path": ".sdk/doc/qa/workflow.yml",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554591,
+      "hwhen": 2026092914523459
+    },
+    "SUMMARY.md": {
+      "action": "write",
+      "path": "SUMMARY.md",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554592,
+      "hwhen": 2026092914523459
+    }
+  }
+}

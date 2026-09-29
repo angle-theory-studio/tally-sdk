@@ -1,0 +1,76 @@
+# Entity: feed
+
+main: kit: entity: feed: {
+
+  alias: field: {}
+
+  fields: {
+    date: {
+      fo: "date"
+      h: "Date"
+      n: "date"
+      r: false
+      t: "`$STRING`"
+    }
+    items: {
+      h: "Items"
+      n: "items"
+      r: false
+      t: "`$ARRAY`"
+    }
+    relative_label: {
+      h: "Relative Label"
+      n: "relative_label"
+      r: false
+      sh: "\"Today\", \"Yesterday\", or the weekday name"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "feed"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /feed"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-03"
+                k: "query"
+                n: "before"
+                or: "before"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/feed"
+          q: {
+            exist: [
+              "before"
+            ]
+          }
+          s: [
+            {
+              lit: "feed"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.days`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

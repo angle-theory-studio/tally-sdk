@@ -1,0 +1,44 @@
+{
+  "foldername": ".jostraca",
+  "filename": "jostraca.meta.log",
+  "last": 1790676208380,
+  "hlast": 2026092910032838,
+  "files": {
+    "model/feature/test.aontu": {
+      "action": "write",
+      "path": "model/feature/test.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790676208377,
+      "hwhen": 2026092910032837
+    },
+    "tm/ts/src/feature/test/TestFeature.ts": {
+      "action": "write",
+      "path": "tm/ts/src/feature/test/TestFeature.ts",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790676208379,
+      "hwhen": 2026092910032837
+    },
+    "model/feature/feature-index.aontu": {
+      "action": "write",
+      "path": "model/feature/feature-index.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790676208379,
+      "hwhen": 2026092910032837
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "existing": {
+    "workout_log": {
+      "WORKOUT_LOG00": {
+        "activity_type": "s6e",
+        "calories": 111,
+        "distance_m": 112,
+        "distance_miles": 113,
+        "duration_label": "s72",
+        "id": "WORKOUT_LOG00",
+        "logged_on": "s74",
+        "moving_time_s": 117,
+        "name": "s76",
+        "occurred_at": "s77",
+        "source": "s78"
+      },
+      "WORKOUT_LOG01": {
+        "activity_type": "sdc",
+        "calories": 221,
+        "distance_m": 222,
+        "distance_miles": 223,
+        "duration_label": "se0",
+        "id": "WORKOUT_LOG01",
+        "logged_on": "se2",
+        "moving_time_s": 227,
+        "name": "se4",
+        "occurred_at": "se5",
+        "source": "se6"
+      },
+      "WORKOUT_LOG02": {
+        "activity_type": "s14a",
+        "calories": 331,
+        "distance_m": 332,
+        "distance_miles": 333,
+        "duration_label": "s14e",
+        "id": "WORKOUT_LOG02",
+        "logged_on": "s150",
+        "moving_time_s": 337,
+        "name": "s152",
+        "occurred_at": "s153",
+        "source": "s154"
+      }
+    }
+  },
+  "new": {
+    "workout_log": {
+      "workout_log_ref01": {
+        "activity_type": "s1b8",
+        "calories": 441,
+        "distance_m": 442,
+        "distance_miles": 443,
+        "duration_label": "s1bc",
+        "logged_on": "s1be",
+        "moving_time_s": 447,
+        "name": "s1c0",
+        "occurred_at": "s1c1",
+        "source": "s1c2"
+      }
+    }
+  },
+  "requests": {
+    "GET /workout_logs": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

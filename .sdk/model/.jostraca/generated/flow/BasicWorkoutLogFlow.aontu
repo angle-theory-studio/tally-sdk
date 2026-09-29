@@ -1,0 +1,22 @@
+# BasicWorkoutLogFlow
+
+main: kit: flow: BasicWorkoutLogFlow:
+{
+  entity: "workout_log",
+  kind: "basic",
+  name: "BasicWorkoutLogFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "workout_log_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicWorkoutLogFlow"
+}

@@ -1,0 +1,58 @@
+# Generated from the API definition and overwritten on every build: do not
+# edit this file. Put customizations in the guide entry file, which includes
+# this one and overrides its defaults:
+#   guide.aontu
+
+guide: {
+  metrics: count: entity: 5
+  metrics: count: path: 8
+  metrics: count: method: 11
+
+  entity: feed: {
+    path: "/feed": {
+      op: list: method: *GET
+      op: list: transform: res: *("`body.days`")|top
+    }
+  }
+
+  entity: food_entry: {
+    path: "/food_entries": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/food_entries/parse": {
+      action: "parse": {}
+      op: create: method: *POST
+    }
+    path: "/food_entries/{id}": {
+      op: patch: method: *PATCH
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: mood_entry: {
+    path: "/mood_entries": {
+      op: create: method: *POST
+      op: list: method: *GET
+      op: list: transform: res: *("`body.entries`")|top
+    }
+    path: "/mood_entries/{id}": {
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: sleep_log: {
+    path: "/sleep_logs": {
+      op: list: method: *GET
+      op: list: transform: res: *("`body.sleep_logs`")|top
+    }
+  }
+
+  entity: workout_log: {
+    path: "/workout_logs": {
+      op: list: method: *GET
+      op: list: transform: res: *("`body.workouts`")|top
+    }
+  }
+
+}

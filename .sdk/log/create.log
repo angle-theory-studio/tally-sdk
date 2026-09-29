@@ -1,0 +1,1 @@
+[2026-09-29T10:02:59.214Z]  Europe/Chisinau=2026-09-29T13:02:59.214  CREATE  /opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node ~/.npm/_npx/877e3324a91c33e2/node_modules/.bin/create-sdkgen tally -d ./openapi.yaml -o ./tally-sdk

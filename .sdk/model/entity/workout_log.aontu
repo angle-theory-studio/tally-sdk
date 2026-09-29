@@ -1,0 +1,133 @@
+# Entity: workout_log
+
+main: kit: entity: workout_log: {
+
+  alias: field: {}
+
+  fields: {
+    activity_type: {
+      h: "Activity Type"
+      n: "activity_type"
+      r: false
+      t: "`$STRING`"
+    }
+    calories: {
+      h: "Calories"
+      n: "calories"
+      r: false
+      t: "`$INTEGER`"
+    }
+    distance_m: {
+      h: "Distance M"
+      n: "distance_m"
+      r: false
+      sh: "Distance in metres"
+      t: "`$INTEGER`"
+    }
+    distance_miles: {
+      h: "Distance Miles"
+      n: "distance_miles"
+      r: false
+      sh: "Distance in miles (rounded to 1 decimal)"
+      t: "`$NUMBER`"
+    }
+    duration_label: {
+      h: "Duration Label"
+      n: "duration_label"
+      r: false
+      sh: "Human-friendly duration, e.g."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$INTEGER`"
+    }
+    logged_on: {
+      fo: "date"
+      h: "Logged On"
+      n: "logged_on"
+      r: false
+      t: "`$STRING`"
+    }
+    moving_time_s: {
+      h: "Moving Time S"
+      n: "moving_time_s"
+      r: false
+      sh: "Moving time in seconds"
+      t: "`$INTEGER`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: false
+      t: "`$STRING`"
+    }
+    occurred_at: {
+      fo: "date-time"
+      h: "Occurred At"
+      n: "occurred_at"
+      r: false
+      t: "`$STRING`"
+    }
+    source: {
+      h: "Source"
+      n: "source"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "workout_log"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /workout_logs"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-03"
+                k: "query"
+                n: "date"
+                or: "date"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/workout_logs"
+          q: {
+            exist: [
+              "date"
+            ]
+          }
+          s: [
+            {
+              lit: "workout_logs"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.workouts`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

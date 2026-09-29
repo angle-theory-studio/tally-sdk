@@ -1,0 +1,41 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      description: `Tally is a personal nutrition and weight tracker. Log food in plain English,
+track your weight, and hit your macro goals.
+
+**Base URL:** https://www.logwithtally.com/api/v1
+
+## Authentication
+
+All endpoints require a Bearer token in the \`Authorization\` header:
+
+\`\`\`
+Authorization: Bearer <api_token>
+\`\`\`
+
+Find your API token in Tally under Settings.
+`
+      security: {
+        in: "header"
+        name: "Authorization"
+        prefix: "Bearer"
+        scheme: "BearerToken"
+        type: "http"
+      }
+      servers: [
+        {
+          url: "https://www.logwithtally.com/api/v1"
+        }
+      ]
+      summary: "Tally is a personal nutrition and weight tracker."
+      title: "Tally API"
+      version: "1"
+      website: "https://logwithtally.com"
+    }
+  }
+}
+

@@ -1,0 +1,59 @@
+# BasicMoodEntryFlow
+
+main: kit: flow: BasicMoodEntryFlow:
+{
+  entity: "mood_entry",
+  kind: "basic",
+  name: "BasicMoodEntryFlow",
+  step: [
+    {
+      i: {
+        ref: "mood_entry_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "mood_entry_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "mood_entry_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "mood_entry01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "mood_entry_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicMoodEntryFlow"
+}

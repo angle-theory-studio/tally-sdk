@@ -1,0 +1,274 @@
+# Entity: food_entry
+
+main: kit: entity: food_entry: {
+
+  alias: field: {}
+
+  fields: {
+    caffeine_mg: {
+      h: "Caffeine Mg"
+      n: "caffeine_mg"
+      r: false
+      t: "`$INTEGER`"
+    }
+    calories: {
+      h: "Calories"
+      n: "calories"
+      r: false
+      t: "`$INTEGER`"
+    }
+    carbs_g: {
+      h: "Carbs G"
+      n: "carbs_g"
+      r: false
+      t: "`$NUMBER`"
+    }
+    confirmed: {
+      h: "Confirmed"
+      n: "confirmed"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    date: {
+      fo: "date"
+      h: "Date"
+      n: "date"
+      r: false
+      sh: "Date to log against (YYYY-MM-DD)."
+      t: "`$STRING`"
+    }
+    entry: {
+      h: "Entry"
+      n: "entry"
+      r: false
+      t: "`$OBJECT`"
+    }
+    fat_g: {
+      h: "Fat G"
+      n: "fat_g"
+      r: false
+      t: "`$NUMBER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$INTEGER`"
+    }
+    input: {
+      h: "Input"
+      n: "input"
+      r: true
+      sh: "Natural-language food description, e.g."
+      t: "`$STRING`"
+    }
+    logged_on: {
+      fo: "date"
+      h: "Logged On"
+      n: "logged_on"
+      r: false
+      t: "`$STRING`"
+    }
+    meal_type: {
+      h: "Meal Type"
+      n: "meal_type"
+      r: false
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: false
+      t: "`$STRING`"
+    }
+    protein_g: {
+      h: "Protein G"
+      n: "protein_g"
+      r: false
+      t: "`$NUMBER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "food_entry"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /food_entries"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/food_entries"
+          s: [
+            {
+              lit: "food_entries"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "POST /food_entries/parse"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/food_entries/parse"
+          q: {
+            "$action": "parse"
+          }
+          s: [
+            {
+              lit: "food_entries"
+            }
+            {
+              lit: "parse"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /food_entries"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-03"
+                k: "query"
+                n: "date"
+                or: "date"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/food_entries"
+          q: {
+            exist: [
+              "date"
+            ]
+          }
+          s: [
+            {
+              lit: "food_entries"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.entries`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /food_entries/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/food_entries/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "food_entries"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          co: {
+            id: "PATCH /food_entries/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "PATCH"
+          o: "/food_entries/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "food_entries"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

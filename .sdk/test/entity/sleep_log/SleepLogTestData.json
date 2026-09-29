@@ -1,0 +1,72 @@
+{
+  "existing": {
+    "sleep_log": {
+      "SLEEP_LOG00": {
+        "awake_seconds": 120,
+        "date": "s79",
+        "deep_sleep_seconds": 122,
+        "duration_label": "s7b",
+        "ended_at": "s7c",
+        "id": "SLEEP_LOG00",
+        "light_sleep_seconds": 126,
+        "rem_sleep_seconds": 127,
+        "sleep_score": 128,
+        "source": "s81",
+        "started_at": "s82",
+        "total_sleep_seconds": 131
+      },
+      "SLEEP_LOG01": {
+        "awake_seconds": 240,
+        "date": "sf1",
+        "deep_sleep_seconds": 242,
+        "duration_label": "sf3",
+        "ended_at": "sf4",
+        "id": "SLEEP_LOG01",
+        "light_sleep_seconds": 246,
+        "rem_sleep_seconds": 247,
+        "sleep_score": 248,
+        "source": "sf9",
+        "started_at": "sfa",
+        "total_sleep_seconds": 251
+      },
+      "SLEEP_LOG02": {
+        "awake_seconds": 360,
+        "date": "s169",
+        "deep_sleep_seconds": 362,
+        "duration_label": "s16b",
+        "ended_at": "s16c",
+        "id": "SLEEP_LOG02",
+        "light_sleep_seconds": 366,
+        "rem_sleep_seconds": 367,
+        "sleep_score": 368,
+        "source": "s171",
+        "started_at": "s172",
+        "total_sleep_seconds": 371
+      }
+    }
+  },
+  "new": {
+    "sleep_log": {
+      "sleep_log_ref01": {
+        "awake_seconds": 480,
+        "date": "s1e1",
+        "deep_sleep_seconds": 482,
+        "duration_label": "s1e3",
+        "ended_at": "s1e4",
+        "light_sleep_seconds": 486,
+        "rem_sleep_seconds": 487,
+        "sleep_score": 488,
+        "source": "s1e9",
+        "started_at": "s1ea",
+        "total_sleep_seconds": 491
+      }
+    }
+  },
+  "requests": {
+    "GET /sleep_logs": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

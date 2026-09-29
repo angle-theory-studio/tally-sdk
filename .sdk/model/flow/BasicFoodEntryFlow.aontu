@@ -1,0 +1,78 @@
+# BasicFoodEntryFlow
+
+main: kit: flow: BasicFoodEntryFlow:
+{
+  entity: "food_entry",
+  kind: "basic",
+  name: "BasicFoodEntryFlow",
+  step: [
+    {
+      i: {
+        ref: "food_entry_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "food_entry_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "food_entry_ref01",
+        srcdatavar: "food_entry_ref01_data",
+        suffix: "_up0",
+        textfield: "date"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-food_entry_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "food_entry_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "food_entry01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "food_entry_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFoodEntryFlow"
+}

@@ -1,0 +1,164 @@
+{
+  "foldername": ".jostraca",
+  "filename": "jostraca.meta.log",
+  "last": 1790693554294,
+  "hlast": 2026092914523429,
+  "files": {
+    "entity/feed.aontu": {
+      "action": "write",
+      "path": "entity/feed.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554289,
+      "hwhen": 2026092914523428
+    },
+    "entity/food_entry.aontu": {
+      "action": "write",
+      "path": "entity/food_entry.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554290,
+      "hwhen": 2026092914523429
+    },
+    "entity/mood_entry.aontu": {
+      "action": "write",
+      "path": "entity/mood_entry.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554290,
+      "hwhen": 2026092914523429
+    },
+    "entity/sleep_log.aontu": {
+      "action": "write",
+      "path": "entity/sleep_log.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554291,
+      "hwhen": 2026092914523429
+    },
+    "entity/workout_log.aontu": {
+      "action": "write",
+      "path": "entity/workout_log.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554291,
+      "hwhen": 2026092914523429
+    },
+    "entity/entity-index.aontu": {
+      "action": "write",
+      "path": "entity/entity-index.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554291,
+      "hwhen": 2026092914523429
+    },
+    "api/api-info.aontu": {
+      "action": "write",
+      "path": "api/api-info.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554292,
+      "hwhen": 2026092914523429
+    },
+    "flow/BasicFeedFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicFeedFlow.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554292,
+      "hwhen": 2026092914523429
+    },
+    "flow/BasicFoodEntryFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicFoodEntryFlow.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554293,
+      "hwhen": 2026092914523429
+    },
+    "flow/BasicMoodEntryFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicMoodEntryFlow.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554293,
+      "hwhen": 2026092914523429
+    },
+    "flow/BasicSleepLogFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicSleepLogFlow.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554293,
+      "hwhen": 2026092914523429
+    },
+    "flow/BasicWorkoutLogFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicWorkoutLogFlow.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554294,
+      "hwhen": 2026092914523429
+    },
+    "flow/flow-index.aontu": {
+      "action": "write",
+      "path": "flow/flow-index.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1790693554294,
+      "hwhen": 2026092914523429
+    }
+  }
+}

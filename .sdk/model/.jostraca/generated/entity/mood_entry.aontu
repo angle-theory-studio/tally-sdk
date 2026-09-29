@@ -1,0 +1,159 @@
+# Entity: mood_entry
+
+main: kit: entity: mood_entry: {
+
+  alias: field: {}
+
+  fields: {
+    body: {
+      h: "Body"
+      n: "body"
+      op: {
+        list: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$INTEGER`"
+    }
+    logged_at: {
+      fo: "date-time"
+      h: "Logged At"
+      n: "logged_at"
+      r: false
+      sh: "ISO 8601 timestamp."
+      t: "`$STRING`"
+    }
+    time_label: {
+      h: "Time Label"
+      n: "time_label"
+      r: false
+      sh: "Human-readable local time"
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "mood_entry"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /mood_entries"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/mood_entries"
+          s: [
+            {
+              lit: "mood_entries"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /mood_entries"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-03"
+                k: "query"
+                n: "date"
+                or: "date"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/mood_entries"
+          q: {
+            exist: [
+              "date"
+            ]
+          }
+          s: [
+            {
+              lit: "mood_entries"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.entries`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /mood_entries/{id}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "id"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/mood_entries/{id}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          s: [
+            {
+              lit: "mood_entries"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

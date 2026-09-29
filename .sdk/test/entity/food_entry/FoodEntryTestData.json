@@ -1,0 +1,96 @@
+{
+  "existing": {
+    "food_entry": {
+      "FOOD_ENTRY00": {
+        "caffeine_mg": 130,
+        "calories": 131,
+        "carbs_g": 132,
+        "confirmed": false,
+        "date": "s86",
+        "entry": {},
+        "fat_g": 136,
+        "id": "FOOD_ENTRY00",
+        "input": "s8a",
+        "logged_on": "s8b",
+        "meal_type": "s8c",
+        "name": "s8d",
+        "protein_g": 142
+      },
+      "FOOD_ENTRY01": {
+        "caffeine_mg": 260,
+        "calories": 261,
+        "carbs_g": 262,
+        "confirmed": false,
+        "date": "s108",
+        "entry": {},
+        "fat_g": 266,
+        "id": "FOOD_ENTRY01",
+        "input": "s10c",
+        "logged_on": "s10d",
+        "meal_type": "s10e",
+        "name": "s10f",
+        "protein_g": 272
+      },
+      "FOOD_ENTRY02": {
+        "caffeine_mg": 390,
+        "calories": 391,
+        "carbs_g": 392,
+        "confirmed": false,
+        "date": "s18a",
+        "entry": {},
+        "fat_g": 396,
+        "id": "FOOD_ENTRY02",
+        "input": "s18e",
+        "logged_on": "s18f",
+        "meal_type": "s190",
+        "name": "s191",
+        "protein_g": 402
+      }
+    }
+  },
+  "new": {
+    "food_entry": {
+      "food_entry_ref01": {
+        "caffeine_mg": 520,
+        "calories": 521,
+        "carbs_g": 522,
+        "confirmed": false,
+        "date": "s20c",
+        "entry": {},
+        "fat_g": 526,
+        "input": "s210",
+        "logged_on": "s211",
+        "meal_type": "s212",
+        "name": "s213",
+        "protein_g": 532
+      }
+    }
+  },
+  "requests": {
+    "POST /food_entries": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "POST /food_entries/parse": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /food_entries": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /food_entries/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PATCH /food_entries/{id}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}
