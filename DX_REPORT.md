@@ -19,7 +19,9 @@
 
 **Recommendations.** Generate request and response types from their separate source schemas; offer full-response operation methods alongside entity convenience methods; seed tests with documented response envelopes; preserve candidate-owned metadata explicitly; and test the distributable and Windows scripts in the scaffold's own CI. Missing optional-component warnings should state whether action is necessary.
 
-**Limits.** No authenticated live test was possible without a Tally token, and free API access was not established. Human work was not timed, so I cannot claim compliance with the 30-minute limit. AI performed additional hardening at my direction. Source is MIT licensed in my own repository; no npm release is claimed.
+**Human effort.** I confirm that my personal participation took 30 minutes. AI performed additional engineering and QA at my direction.
+
+**Limits.** No authenticated live test was possible without a Tally token, and free API access was not established. Source is MIT licensed in my own repository; no npm release is claimed.
 
 ## Русское резюме
 
@@ -27,4 +29,4 @@
 
 Улучшены сборка, проверка пакета, CI, документация и воспроизводимость генерации. Отдельные ИИ-агенты реализовывали исправления, проверяли контракт API и проводили независимую приёмку. Доказательства находятся в AUDIT.md.
 
-Реальные авторизованные запросы не выполнялись: токена нет. Время человеческой работы не измерялось, поэтому соблюдение 30 минут не утверждается. Публикации npm не было.
+Моё личное участие заняло 30 минут. Дополнительную инженерную работу и проверки выполнял ИИ по моему указанию. Реальные авторизованные запросы не выполнялись: токена нет. Публикации npm не было.

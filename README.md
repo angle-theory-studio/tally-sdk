@@ -88,7 +88,7 @@ Offline contract tests check request URLs, methods, bodies, authentication, all 
 
 A separate read-only live check is available as `node checks/live-readonly.cjs` after setting `TALLY_APIKEY`. It makes GET requests only and does not print returned personal records or the token. It is never part of the default offline test run. Actual live-test status is recorded in [AUDIT.md](AUDIT.md).
 
-Human work time was not measured, so compliance with the assignment's 30-minute human-work limit is not claimed. No npm publication has been performed.
+The candidate confirms 30 minutes of personal participation. Additional engineering and QA were performed by AI. No npm publication has been performed.
 
 ## Regenerate
 

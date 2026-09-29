@@ -55,6 +55,10 @@ The clean-copy run repeated the generated suite, all 54 independent checks, cons
 
 The manual npm workflow defaults to verification. Its optional publish job consumes the verified tarball and has a separate tagging step. Local tests exercised registry decisions with controlled responses: new version and identical integrity accepted; conflicting integrity and HTTP 503 rejected. Actual registry publishing, trusted-publishing setup and OIDC authentication have not been exercised. No npm release or release tag has been created.
 
+## Human effort
+
+On 29 September 2026, the candidate confirmed 30 minutes of personal participation. This duration is candidate-reported. AI performed the additional engineering and QA at the candidate's direction.
+
 ## Remaining boundaries
 
 - No authenticated live request was made: a Tally token was unavailable. Free API-tier access, quotas and account permissions are not established.
@@ -62,6 +66,5 @@ The manual npm workflow defaults to verification. Its optional publish job consu
 - Legacy `list()` intentionally remains an entity array. Use `client.api` for complete aggregate values and cursors. Corrected legacy response unions can require TypeScript caller changes, documented in CHANGELOG.
 - Schema-derived validation is tied to the committed specification. Unexpected server shapes will produce an explicit validation error; offline tests cannot certify every real server variant.
 - The local fresh-install check used a populated npm cache. It does not prove registry availability on every machine.
-- Human work was not timed; compliance with the 30-minute human-work constraint cannot be claimed retrospectively.
 
 Reproduction commands are in [SUBMISSION.md](SUBMISSION.md). Exact operation contracts and source-spec identity are in [API_CONTRACT.md](API_CONTRACT.md).

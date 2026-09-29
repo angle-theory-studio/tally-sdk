@@ -81,4 +81,4 @@ This explicit opt-in script makes five GET requests, has a timeout and prints on
 
 Authenticated live calls have not been performed because a Tally API key was unavailable. Free API-tier availability and account-specific permissions have not been established. The supplied OpenAPI contract and injected responses are the basis of offline verification.
 
-Human effort was not timed, so compliance with the assignment's 30-minute human-work limit cannot be confirmed. AI performed additional engineering and QA at the candidate's direction. No claim is made that every possible server response, deployment environment or real-account workflow has been tested.
+The candidate confirms 30 minutes of personal participation. AI performed additional engineering and QA at the candidate's direction. No claim is made that every possible server response, deployment environment or real-account workflow has been tested.
